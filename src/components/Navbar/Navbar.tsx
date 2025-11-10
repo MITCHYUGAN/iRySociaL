@@ -1,16 +1,17 @@
 import { AppSidebar } from "./app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
+import { useSidebar } from "../ui/sidebar";
+import { Menu } from "lucide-react";
 
 const Navbar = ({children} : {children?: React.ReactNode}) => {
+  const { toggleSidebar } = useSidebar()
+
   return (
     <div>
-      <SidebarProvider>
       <AppSidebar />
       <main>
-        <SidebarTrigger className="md:hidden"></SidebarTrigger>
+        <Menu className="md:hidden m-6" onClick={() => toggleSidebar()}/>
         {children}
       </main>
-      </SidebarProvider>
     </div>
   );
 };
