@@ -10,6 +10,10 @@
   font-size: 20px !important;
 } */
 
+/* span{
+    font-size: 16px;
+} */
+
 
 :root {
   --background: oklch(1 0 0);
@@ -91,7 +95,7 @@
   --chart-3: oklch(0.5500 0.2200 263);
   --chart-4: oklch(0.4900 0.2200 264);
   --chart-5: oklch(0.4200 0.1800 266);
-  --sidebar: oklch(0.2050 0 0);
+  --sidebar: oklch(0.14 0 0);
   --sidebar-foreground: oklch(0.9850 0 0);
   --sidebar-primary: oklch(0.4880 0.2430 264.3760);
   --sidebar-primary-foreground: oklch(0.9850 0 0);
@@ -103,6 +107,7 @@
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --radius: 1rem;
+  --text-sm: 1rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;
@@ -173,23 +178,37 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+  /* * {
+    @apply border-border outline-ring/0;
+  } */
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ================================== My own styling to overide default ==================================*/
+
+/* Sidebar spacing */
+.p-2 {
+    padding: calc(var(--spacing) * 6);
+}
+
+/* Sidebar border styling */
+.group-data-\[side\=left\]\:border-r {
+    &:is(:where(.group)[data-side="left"] *) {
+        border-right-style: var(--tw-border-style);
+        border-right-width: 0.5px;
+        border-color: rgba(33, 33, 33, 0.69);
+    }
 }
 
 /* Custom Components like Button, Input, etc... To make the app original */
 
 @layer components {
   .button {
-    /* background-color: #23edbe !important; */
-    background-color: #51ffd6 !important;
     color: black !important;
     padding: 25px !important;
     cursor: pointer;
-    font-size: 15px !important;
+    font-size: 17px !important;
   }
 }

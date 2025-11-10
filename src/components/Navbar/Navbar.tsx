@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 
 const Navbar = ({children} : {children: React.ReactNode}) => {
   return (
-    <div >
+    <div>
       <SidebarProvider>
       <AppSidebar />
       <main>

@@ -3,6 +3,7 @@ import { Bell, Bookmark, ChevronUp, Home, Mail, MessageSquare, Newspaper, PlusCi
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { ModeToggle } from "../../features/Dark_LightMode/mode-toggle";
 
 const browseitems = [
   {
@@ -53,10 +54,14 @@ const moreitems = [
 export function AppSidebar() {
   return (
     <Sidebar>
-      <Sidebar>
-        <SidebarHeader>
-          <div className="sidebar_logo hidden sm:block w-60">
+      <SidebarHeader>
+        <div className="flex flex-col items-start mt-5 gap-5">
+          <div className="sidebar_logo hidden sm:block w-50">
+            {/* show on dark theme */}
             <img src="src/assets/irysocial_logo.png" alt="" />
+
+            {/* show on light theme */}
+            <img src="src/assets/irysocial_logodark.png" alt="" />
           </div>
           <InputGroup>
             <InputGroupInput placeholder="Search..." />
@@ -64,50 +69,53 @@ export function AppSidebar() {
               <Search />
             </InputGroupAddon>
           </InputGroup>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Browse</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {browseitems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <SidebarGroup>
-            <Button >
-              {" "}
-              <PlusCircle /> Create
-            </Button>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>More</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenuItem>
-                {moreitems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenuItem>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-        <SidebarFooter>
+        </div>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Browse</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {browseitems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <Button className="button">
+            {" "}
+            <PlusCircle /> Create
+          </Button>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>More</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {moreitems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <div className="flex items-center gap-3">
+          <ModeToggle />
           <SidebarMenu>
             <SidebarMenuItem>
               <DropdownMenu>
@@ -117,7 +125,7 @@ export function AppSidebar() {
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent >
+                <DropdownMenuContent>
                   <DropdownMenuItem>
                     <span>Account</span>
                   </DropdownMenuItem>
@@ -131,8 +139,8 @@ export function AppSidebar() {
               </DropdownMenu>
             </SidebarMenuItem>
           </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }
