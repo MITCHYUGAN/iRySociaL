@@ -1,9 +1,15 @@
+import MainFeed from "./components/MainFeed"
+import Navbar from "./components/Navbar/Navbar"
+// import SideBar from "./components/SideBar"
+
 function App() {
 
   return (
-    <>
-      <h1>Irys Socials</h1>
-    </>
+    <div className="flex">
+      {/* <SideBar /> */}
+      <Navbar />
+      <MainFeed />
+    </div>
   )
 }
 
