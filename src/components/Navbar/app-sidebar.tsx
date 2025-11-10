@@ -4,6 +4,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ModeToggle } from "../../features/Dark_LightMode/mode-toggle";
+import { useTheme } from "@/features/Dark_LightMode/theme-provider";
 
 const browseitems = [
   {
@@ -52,16 +53,14 @@ const moreitems = [
 ];
 
 export function AppSidebar() {
+  const { theme } = useTheme();
+
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex flex-col items-start mt-5 gap-5">
-          <div className="sidebar_logo hidden sm:block w-50">
-            {/* show on dark theme */}
-            <img src="src/assets/irysocial_logo.png" alt="" />
-
-            {/* show on light theme */}
-            <img src="src/assets/irysocial_logodark.png" alt="" />
+          <div className="sidebar_logo hidden sm:block">
+            {theme === "light" ? <img className="w-50" src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
           </div>
           <InputGroup>
             <InputGroupInput placeholder="Search..." />
