@@ -1,4 +1,16 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Bell, Bookmark, ChevronUp, Home, Mail, MessageSquare, Newspaper, PlusCircle, Search, Settings, User2, Video, X } from "lucide-react";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 import { Button } from "../ui/button";
@@ -9,23 +21,23 @@ import { useTheme } from "@/features/Dark_LightMode/theme-provider";
 const browseitems = [
   {
     title: "Home",
-    url: "#",
+    url: "/home",
     icon: Home,
   },
   {
-    title: "Videos",
-    url: "#",
-    icon: Video,
+    title: "Posts",
+    url: "/posts",
+    icon: MessageSquare,
   },
   {
     title: "Articles",
-    url: "#",
+    url: "/articles",
     icon: Newspaper,
   },
   {
-    title: "Posts",
-    url: "#",
-    icon: MessageSquare,
+    title: "Videos",
+    url: "/videos",
+    icon: Video,
   },
 ];
 
@@ -54,12 +66,12 @@ const moreitems = [
 
 export function AppSidebar() {
   const { theme } = useTheme();
-   const { toggleSidebar } = useSidebar()
+  const { toggleSidebar } = useSidebar();
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <X className="md:hidden absolute right-5" onClick={() => toggleSidebar()}/>
+        <X className="md:hidden absolute right-5" onClick={() => toggleSidebar()} />
         <div className="flex flex-col items-start mt-5 gap-5">
           <div className="sidebar_logo">
             {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
