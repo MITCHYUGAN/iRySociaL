@@ -73,9 +73,11 @@ export function AppSidebar() {
       <SidebarHeader>
         <X className="md:hidden absolute right-5" onClick={() => toggleSidebar()} />
         <div className="flex flex-col items-start mt-5 gap-5">
-          <div className="sidebar_logo">
-            {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
-          </div>
+          <a href="/home">
+            <div className="sidebar_logo">
+              {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
+            </div>
+          </a>
           <InputGroup>
             <InputGroupInput placeholder="Search..." />
             <InputGroupAddon>

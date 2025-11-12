@@ -21,7 +21,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex">
+      <div className="flex w-full">
         <Navbar />
         <RouterProvider router={router} />
       </div>

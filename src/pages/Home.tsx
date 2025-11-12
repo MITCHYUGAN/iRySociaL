@@ -1,14 +1,10 @@
+import CreatePostForm from "@/features/PostCreation/CreatePostForm";
+
 const Home = () => {
+
   return (
-    <div className="p-6">
-      <section aria-label="mainfeed whats on your mind">
-        <div>
-          <img src="" alt="" />
-        </div>
-        <div>
-          <textarea name="" id="" placeholder="Whats on your mind"></textarea>
-        </div>
-      </section>
+    <div className="pt-5 pr-5 md:px-20 md:py-10 w-full">
+      <CreatePostForm />
       <section aria-label="mainfeed filters">
         <div>
           <h2>For you</h2>
