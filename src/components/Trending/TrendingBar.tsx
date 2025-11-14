@@ -35,32 +35,10 @@ const browseitems = [
   },
 ];
 
-// const moreitems = [
-//   {
-//     title: "Bookmarks",
-//     url: "#",
-//     icon: Bookmark,
-//   },
-//   {
-//     title: "Notifications",
-//     url: "#",
-//     icon: Bell,
-//   },
-//   {
-//     title: "Messages",
-//     url: "#",
-//     icon: Mail,
-//   },
-//   {
-//     title: "Settings",
-//     url: "#",
-//     icon: Settings,
-//   },
-// ];
-
 const TrendingBar = () => {
   return (
-    <SidebarProvider className="hidden xl:flex w-[1000px]">
+    <SidebarProvider className="hidden xl:flex w-[40%]">
+    {/* <SidebarProvider className="hidden xl:flex w-[1000px]"> */}
       <Sidebar side="right">
         <SidebarHeader>
           <div className="relative">

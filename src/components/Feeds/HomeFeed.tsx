@@ -25,9 +25,9 @@ const HomeFeeds = () => {
           <PostCard featured />
           <VideoCard isGated={false} />
           <PostCard />
+          <VideoCard isGated={true} />
           <ArticleCard isGated={true} />
           <PostCard />
-          <VideoCard isGated={true} />
         </TabsContent>
 
         <TabsContent value="following" className="space-y-4">

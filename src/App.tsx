@@ -24,11 +24,11 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col md:flex-row w-full">
-        <SidebarProvider className="w-[1000px]">
+        <SidebarProvider className="w-[40%]">
           <Navbar />
         </SidebarProvider>
         <RouterProvider router={router} />
-          <TrendingBar />
+        <TrendingBar />
       </div>
     </ThemeProvider>
   );
