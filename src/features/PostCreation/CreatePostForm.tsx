@@ -6,15 +6,19 @@ import { useState } from "react";
 
 const CreatePostForm = () => {
   const [postValue, setValue] = useState("");
-  // const [isFocused, setIsfocused] = useState(true);
+  const [isFocused, setIsfocused] = useState(false);
 
   const createPost = () => {
     console.log("Post Value", postValue);
   };
   return (
-    <div>
-      <section className="flex gap-5" aria-label="mainfeed whats on your mind">
-        <Avatar className="w-[50px] h-[50px]">
+    <section className="flex flex-col gap-10" aria-label="mainfeed whats on your mind">
+      {/* <div className="sidebar_logo md:hidden self-center">
+        {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
+      </div> */}
+
+      <div className="flex gap-5">
+        <Avatar className="w-[50px] h-[50px] hidden md:block self-start">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>🥷</AvatarFallback>
         </Avatar>
@@ -24,21 +28,25 @@ const CreatePostForm = () => {
             onChange={(e) => setValue(e.target.value)}
             className="min-h-[60px]"
             placeholder="What's on your mind?"
-            // onFocus={() => setIsfocused(true)} onBlur={() => setIsfocused(false)}
+            onFocus={() => setIsfocused(true)}
+            onBlur={() => setIsfocused(false)}
           />
-          <div className="flex justify-between">
-            <div className="flex gap-5">
-              <Image />
-              <Smile />
-              <Video />
+
+          {isFocused && (
+            <div className="flex justify-between">
+              <div className="flex gap-5">
+                <Image />
+                <Smile />
+                <Video />
+              </div>
+              <Button className="cursor-pointer" onClick={createPost}>
+                Post
+              </Button>
             </div>
-            <Button className="cursor-pointer" onClick={createPost}>
-              Post
-            </Button>
-          </div>
+          )}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
