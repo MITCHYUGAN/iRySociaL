@@ -10,9 +10,9 @@ interface ArticleCardProps {
 export function ArticleCard({ isGated = false }: ArticleCardProps) {
   return (
     <div className="bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
-      <div className="flex gap-4">
+      <div className="flex gap-6">
         {/* Article Image */}
-        <div className="hidden sm:block w-24 h-24 bg-secondary rounded-lg overflow-hidden shrink-0">
+        <div className="hidden sm:block w-[30%] bg-secondary rounded-lg overflow-hidden shrink-0">
           <img
             src="https://thumbs.dreamstime.com/b/baltic-see-very-nice-pic-klaip%C4%97da-176842928.jpg"
             alt="Article"
@@ -24,14 +24,14 @@ export function ArticleCard({ isGated = false }: ArticleCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
             <div className="flex-1">
-              <h3 className="font-bold line-clamp-2 group-hover:text-accent transition">
+              <h3 className="font-bold text-3xl line-clamp-2 group-hover:text-primary transition">
                 The Future of Web Development
               </h3>
             </div>
             {isGated && <Lock className="w-4 h-4 text-accent shrink-0 mt-1" />}
           </div>
 
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+          <p className="text-[20px] text-muted-foreground line-clamp-2 mb-3">
             Exploring the latest trends and technologies shaping the future of web development...
           </p>
 
