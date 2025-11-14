@@ -3,13 +3,13 @@ import { VideoCard } from "../Cards/VideoCard";
 import { PostCard } from "../Cards/PostCard";
 import { ArticleCard } from "../Cards/ArticleCard";
 
-const tabSTyle = "rounded-[0.4rem] p-1.5 cursor-pointer hover:bg-black focus:bg-black active:bg-black";
+const tabSTyle = "rounded-[0.4rem] p-1.5 cursor-pointer focus:bg-black active:bg-black";
 
 const HomeFeeds = () => {
   return (
     <div className="mt-10">
-      <Tabs defaultValue="for-you" className="space-y-4">
-        <TabsList className="grid w-full p-2.5 rounded-[0.4rem] grid-cols-3 bg-[#222222]">
+      <Tabs defaultValue="for-you" className="space-y-8">
+        <TabsList className="grid w-full p-1 rounded-[0.4rem] grid-cols-3 bg-[#222222]">
           <TabsTrigger value="for-you" className="rounded-[0.4rem] p-1.5 cursor-pointer hover:bg-black focus:bg-black active:bg-black">
             For You
           </TabsTrigger>

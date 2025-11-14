@@ -13,10 +13,6 @@ const CreatePostForm = () => {
   };
   return (
     <section className="flex flex-col gap-10" aria-label="mainfeed whats on your mind">
-      {/* <div className="sidebar_logo md:hidden self-center">
-        {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
-      </div> */}
-
       <div className="flex gap-5">
         <Avatar className="w-[50px] h-[50px] hidden md:block self-start">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />

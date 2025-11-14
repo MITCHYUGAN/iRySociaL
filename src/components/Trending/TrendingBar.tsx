@@ -1,6 +1,6 @@
 import { Search, TrendingUp } from "lucide-react";
 import { Input } from "../ui/input";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from "../ui/sidebar";
 
 const browseitems = [
   {
@@ -60,7 +60,7 @@ const browseitems = [
 
 const TrendingBar = () => {
   return (
-    <div className="hidden xl:flex ">
+    <SidebarProvider className="hidden xl:flex w-[1000px]">
       <Sidebar side="right">
         <SidebarHeader>
           <div className="relative">
@@ -105,7 +105,7 @@ const TrendingBar = () => {
           </SidebarGroup> */}
         </SidebarContent>
       </Sidebar>
-    </div>
+    </SidebarProvider>
   );
 };
 

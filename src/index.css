@@ -169,9 +169,6 @@
 }
 
 @layer base {
-  /* * {
-    @apply border-border outline-ring/0;
-  } */
   body {
     @apply bg-background text-foreground;
   }
@@ -188,13 +185,20 @@
 .group-data-\[side\=left\]\:border-r {
   border-right-style: var(--tw-border-style);
   border-right-width: 0.5px;
-  border-color: rgba(33, 33, 33, 0.69);
+  /* border-color: rgba(33, 33, 33, 0.69); */
+  border-color: rgba(25, 25, 25, 0.69);
 }
 /* Sidebar border styling mobile*/
 .border-r {
   border-right-style: var(--tw-border-style);
   border-right-width: 0.5px;
   border-color: rgba(33, 33, 33, 0.69);
+}
+
+
+/* SIdebar Mobile Height */
+.min-h-svh {
+  min-height: 0;
 }
 
 /* Custom Components like Button, Input, etc... To make the app original */
