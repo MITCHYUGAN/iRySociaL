@@ -12,7 +12,7 @@ export function ArticleCard({ isGated = false }: ArticleCardProps) {
     <div className="bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
       <div className="flex gap-4">
         {/* Article Image */}
-        <div className="hidden sm:block w-24 h-24 bg-secondary rounded-lg overflow-hidden flex-shrink-0">
+        <div className="hidden sm:block w-24 h-24 bg-secondary rounded-lg overflow-hidden shrink-0">
           <img
             src="https://thumbs.dreamstime.com/b/baltic-see-very-nice-pic-klaip%C4%97da-176842928.jpg"
             alt="Article"
@@ -28,7 +28,7 @@ export function ArticleCard({ isGated = false }: ArticleCardProps) {
                 The Future of Web Development
               </h3>
             </div>
-            {isGated && <Lock className="w-4 h-4 text-accent flex-shrink-0 mt-1" />}
+            {isGated && <Lock className="w-4 h-4 text-accent shrink-0 mt-1" />}
           </div>
 
           <p className="text-sm text-muted-foreground line-clamp-2 mb-3">

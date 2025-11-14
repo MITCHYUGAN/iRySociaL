@@ -5,6 +5,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
 import Videos from "./pages/Videos";
 import Posts from "./pages/Post";
 import Articles from "./pages/Articles";
+import TrendingBar from "./components/Trending/TrendingBar";
 
 const router = createBrowserRouter([
   {
@@ -21,9 +22,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex m-5 flex-col md:flex-row w-full">
+      <div className="flex flex-col md:flex-row w-full">
         <Navbar />
         <RouterProvider router={router} />
+        <TrendingBar />
       </div>
     </ThemeProvider>
   );

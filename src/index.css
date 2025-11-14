@@ -2,17 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-/* @tailwind base; */
 @tailwind utilities;
-
-/* body {
-  background: black;
-  font-size: 20px !important;
-} */
-
-/* span{
-    font-size: 16px;
-} */
 
 :root {
   --background: oklch(1 0 0);
