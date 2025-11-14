@@ -1,6 +1,6 @@
 "use client"
 
-import { Heart, Lock } from "lucide-react"
+import { Heart, Lock, } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface ArticleCardProps {
