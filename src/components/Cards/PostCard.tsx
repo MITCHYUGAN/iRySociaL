@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
-import { Heart, MessageCircle, Share2, MoreHorizontal } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Heart, MessageCircle, Share2, MoreHorizontal } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAccount } from "wagmi";
 
 interface PostCardProps {
-  featured?: boolean
+  featured?: boolean;
 }
 
 export function PostCard({ featured = false }: PostCardProps) {
+  const { address } = useAccount();
+
   return (
     <div
       className={`bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
@@ -28,26 +31,25 @@ export function PostCard({ featured = false }: PostCardProps) {
             <p className="text-xs text-muted-foreground">@handle • 2h ago</p>
           </div>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Follow</DropdownMenuItem>
-            <DropdownMenuItem>Mute</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">Report</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {address && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                <MoreHorizontal className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Follow</DropdownMenuItem>
+              <DropdownMenuItem>Mute</DropdownMenuItem>
+              <DropdownMenuItem className="text-destructive">Report</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
       {/* Content */}
       <div className="mb-3">
-        <p className="text-foreground">
-          Just launched our new feature that lets creators monetize their content directly. This changes everything for
-          independent creators! 🚀
-        </p>
+        <p className="text-foreground">Just launched our new feature that lets creators monetize their content directly. This changes everything for independent creators! 🚀</p>
       </div>
 
       {/* Image */}
@@ -61,19 +63,24 @@ export function PostCard({ featured = false }: PostCardProps) {
 
       {/* Engagement */}
       <div className="flex gap-8 text-muted-foreground mb-3 border-t border-border pt-3">
-        <button className="flex items-center gap-2 text-sm hover:text-accent hover:bg-accent/10 px-2 py-1 rounded transition">
-          <MessageCircle className="w-4 h-4" />
-          <span>234</span>
-        </button>
-        <button className="flex items-center gap-2 text-sm hover:text-accent hover:bg-accent/10 px-2 py-1 rounded transition">
-          <Heart className="w-4 h-4" />
-          <span>1.2K</span>
-        </button>
+        {address && (
+          <>
+            <button className="flex items-center gap-2 text-sm hover:text-accent hover:bg-accent/10 px-2 py-1 rounded transition">
+              <MessageCircle className="w-4 h-4" />
+              <span>234</span>
+            </button>
+
+            <button className="flex items-center gap-2 text-sm hover:text-accent hover:bg-accent/10 px-2 py-1 rounded transition">
+              <Heart className="w-4 h-4" />
+              <span>1.2K</span>
+            </button>
+          </>
+        )}
         <button className="flex items-center gap-2 text-sm hover:text-accent hover:bg-accent/10 px-2 py-1 rounded transition">
           <Share2 className="w-4 h-4" />
           <span>89</span>
         </button>
       </div>
     </div>
-  )
+  );
 }

@@ -178,7 +178,7 @@
 
 /* Sidebar spacing */
 .p-2 {
-  padding: calc(var(--spacing) * 6);
+  padding: calc(var(--spacing) * 5.7);
 }
 
 /* Sidebar border styling */
