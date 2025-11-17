@@ -15,7 +15,7 @@ import { Bell, Bookmark, ChevronUp, Home, Mail, MessageSquare, Newspaper, PlusCi
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 import { Button } from "../ui/button";
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { ModeToggle } from "../../features/Dark_LightMode/mode-toggle";
+// import { ModeToggle } from "../../features/Dark_LightMode/mode-toggle";
 import { useTheme } from "@/features/Dark_LightMode/theme-provider";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
@@ -77,9 +77,7 @@ export function AppSidebar() {
   const { toggleSidebar } = useSidebar();
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
-
   const margin = address ? "0px" : "100px"
-  console.log("Margin", margin)
 
   return (
     <Sidebar>
