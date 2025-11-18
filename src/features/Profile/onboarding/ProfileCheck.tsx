@@ -8,7 +8,6 @@ const ProfileCheck = () => {
 
   useEffect(() => {
     if (isConnected) {
-      console.log("Fish");
       navigate("/onboarding/profile");
     }
   }, [isConnected, navigate]);

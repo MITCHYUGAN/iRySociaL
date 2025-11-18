@@ -6,10 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Spinner } from "@/components/ui/spinner";
-import { ArrowLeft, Wallet } from "lucide-react";
-import { useState } from "react";
+import { AlertCircleIcon, ArrowLeft, CheckCircle2Icon, Wallet, XIcon } from "lucide-react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
+import { createprofile } from "./create-profile";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getProfile } from "./grapghqLQuery/queryprofile";
 
 const CreateProfile = () => {
   const { address } = useAccount();
@@ -18,26 +21,42 @@ const CreateProfile = () => {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isTXCancel, setTXCancel] = useState(false);
+  const [isProfileCreated, setIsProfileCreated] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Yahh");
-
     setLoading(true);
 
     if (!username) {
-      console.log("Pls input a username");
       setLoading(false);
+      alert("Pls input a Valid username");
       return;
     }
 
-    // try {
-      
-    // } catch (error) {
-      
-    // }
+    if (!address) {
+      setLoading(false);
+      alert("Wallet not connected");
+      return;
+    }
 
-    console.log("Pig");
+    const profile = await getProfile(address);
+    console.log("profile", profile);
+
+    try {
+      await createprofile(username, bio, address);
+      setLoading(false);
+      setIsProfileCreated(true);
+    } catch (error: unknown) {
+      console.log("Error while creating profile", error);
+
+      if (error instanceof Error && error.message.includes("user rejected action")) {
+        setTXCancel(true);
+      }
+
+      setLoading(false);
+      return;
+    }
   };
 
   const isValid = username.trim().length >= 3 && username.trim().length <= 20;
@@ -55,7 +74,6 @@ const CreateProfile = () => {
           </EmptyHeader>
           <EmptyContent>
             <ConnectButton />
-            {/* <Button onClick={() => connect()}>Connect wallet</Button> */}
           </EmptyContent>
         </Empty>
       ) : (
@@ -87,7 +105,7 @@ const CreateProfile = () => {
                   <Input value={username} placeholder="username" maxLength={20} onChange={(e) => setUsername(e.target.value)} className="w-full pl-2 text-base h-11" />
                 </div>
                 <div className="flex justify-between pt-1">
-                  <p className="text-xs text-muted-foreground">3-20 characters, lowercase & numbers</p>
+                  <p className="text-xs text-muted-foreground">3-20 characters, lowercase & numbers (without the @)</p>
                   <p className={`text-xs font-semibold ${isValid ? "text-primary" : "text-muted-foreground"}`}>{username.length}/20</p>
                 </div>
               </div>
@@ -131,6 +149,30 @@ const CreateProfile = () => {
               </Button>
             </form>
           </Card>
+
+          {isTXCancel && (
+            <Alert variant={"destructive"} className="w-[60%] md:w-[400px] absolute bottom-20 right-6">
+              <AlertCircleIcon />
+              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setTXCancel(false)}>
+                <XIcon className="size-5" />
+                <span className="sr-only">Close</span>
+              </button>
+              <AlertTitle className="max-md:text-[15px]">TX Cancelled</AlertTitle>
+              <AlertDescription className="max-md:text-[12px] text-gray-400">User cancelled the transaction</AlertDescription>
+            </Alert>
+          )}
+
+          {isProfileCreated && (
+            <Alert variant={"default"} className="w-[60%] md:w-[400px] absolute bottom-20 right-6 border-primary">
+              <CheckCircle2Icon className="text-primary" />
+              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setTXCancel(false)}>
+                <XIcon className="size-5" />
+                <span className="sr-only">Close</span>
+              </button>
+              <AlertTitle className="max-md:text-[15px] text-primary">Successful</AlertTitle>
+              <AlertDescription className="max-md:text-[12px]">Your profile has been successfully created</AlertDescription>
+            </Alert>
+          )}
         </div>
       )}
     </div>
