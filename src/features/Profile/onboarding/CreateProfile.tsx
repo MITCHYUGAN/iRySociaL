@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Spinner } from "@/components/ui/spinner";
 import { AlertCircleIcon, ArrowLeft, CheckCircle2Icon, Wallet, XIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
 import { createprofile } from "./create-profile";
@@ -23,6 +23,22 @@ const CreateProfile = () => {
   const [loading, setLoading] = useState(false);
   const [isTXCancel, setTXCancel] = useState(false);
   const [isProfileCreated, setIsProfileCreated] = useState(false);
+
+  useEffect(() => {
+    if (!address) {
+      return;
+    }
+
+    const checkprofile = async () => {
+      const profile = await getProfile(address);
+
+      if (profile) {
+        navigate("/");
+      }
+    };
+
+    checkprofile();
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,13 +56,11 @@ const CreateProfile = () => {
       return;
     }
 
-    const profile = await getProfile(address);
-    console.log("profile", profile);
-
     try {
       await createprofile(username, bio, address);
       setLoading(false);
       setIsProfileCreated(true);
+      navigate("/")
     } catch (error: unknown) {
       console.log("Error while creating profile", error);
 

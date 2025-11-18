@@ -32,7 +32,5 @@ export const getProfile = async (author: string) => {
         const contentResponse = await axios.get(`${GATEWAY_URL}/${id}`)
         return contentResponse.data
     }
-
-    console.log("data", edges)
     return null
 };
