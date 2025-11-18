@@ -5,12 +5,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getProfile } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-// import { MapPin, LinkIcon, Calendar } from "lucide-react";
+import {
+  // MapPin,
+  // LinkIcon,
+  Calendar,
+  SquarePen,
+} from "lucide-react";
 
 const Profile = () => {
   const { address } = useAccount();
+  const [owner, setOwner] = useState(false);
+  const [profileUsername, setProfileUsername] = useState("");
+  const [profileBio, setProfileBio] = useState("");
+  const [profileJoined, setProfileJoined] = useState(Date);
 
   useEffect(() => {
     if (!address) {
@@ -18,15 +27,33 @@ const Profile = () => {
     }
 
     const fetchProfile = async () => {
-      const profile = getProfile(address);
+      const profile = await getProfile(address);
       console.log("profile", profile);
+
+      if (profile) {
+        setProfileUsername(profile.username);
+        setProfileBio(profile.bio);
+
+        const date = new Date(profile.createdAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+        });
+
+        setProfileJoined(date);
+
+        console.log("profileJoined", date);
+
+        if (profile.author === address) {
+          setOwner(true);
+        }
+      }
     };
 
     fetchProfile();
-  });
+  }, [address]);
 
   return (
-    <div className="w-full pt-5 lg:py-10 px-5 flex-1">
+    <div className="w-full pt-5 lg:py-10 px-5 flex-1 max-w-[1200px] ">
       <div className="h-48 bg-linear-to-r from-accent/20 to-primary/20 rounded-lg mx-4 mt-4"></div>
 
       <div className="px-4 pb-6">
@@ -36,36 +63,43 @@ const Profile = () => {
             <AvatarFallback>🥷</AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold">Creator Profile</h1>
-            <p className="text-muted-foreground">@creatorhandle</p>
+            <h1 className="text-5xl font-bold">{profileUsername}</h1>
+            <p className="text-muted-foreground text-2xl">@{profileUsername}</p>
             {/* <Badge className="mt-2">Verified</Badge> */}
           </div>
-          <div className="flex gap-2 w-full sm:w-auto">
-            <Button
-            // onClick={() => setIsFollowing(!isFollowing)}
-            // variant={isFollowing ? "outline" : "default"}
-            // className={
-            //   isFollowing ? "" : "bg-accent hover:bg-accent/90 text-accent-foreground w-full sm:w-auto"
-            // }
-            >
-              {/* {isFollowing ? "Following" : "Follow"} */}
-              Follow
-            </Button>
-            <Button
-            // onClick={() => setIsSubscribed(!isSubscribed)}
-            // className={`${isSubscribed ? "bg-secondary hover:bg-secondary/90" : "bg-primary hover:bg-primary/90"} w-full sm:w-auto`}
-            >
-              {/* {isSubscribed ? "Subscribed" : "Subscribe"} */}
-              Subscribe
-            </Button>
-          </div>
+
+          {!owner ? (
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Button
+              // onClick={() => setIsFollowing(!isFollowing)}
+              // variant={isFollowing ? "outline" : "default"}
+              // className={
+              //   isFollowing ? "" : "bg-accent hover:bg-accent/90 text-accent-foreground w-full sm:w-auto"
+              // }
+              >
+                {/* {isFollowing ? "Following" : "Follow"} */}
+                Follow
+              </Button>
+              <Button
+              // onClick={() => setIsSubscribed(!isSubscribed)}
+              // className={`${isSubscribed ? "bg-secondary hover:bg-secondary/90" : "bg-primary hover:bg-primary/90"} w-full sm:w-auto`}
+              >
+                {/* {isSubscribed ? "Subscribed" : "Subscribe"} */}
+                Subscribe
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button className="cursor-pointer"><SquarePen />Edit Profile</Button>
+            </div>
+          )}
         </div>
 
         {/* Bio */}
         <div className="space-y-3 mb-6">
-          <p className="text-foreground">Creating amazing content about technology, web development, and the digital future. Join 2.3M+ creators.</p>
-          {/* <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
+          <p className="text-foreground text-2xl">{profileBio}</p>
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+            {/* <div className="flex items-center gap-1">
               <MapPin className="w-4 h-4" />
               San Francisco, CA
             </div>
@@ -74,12 +108,12 @@ const Profile = () => {
               <a href="#" className="text-accent hover:underline">
                 creatorsite.com
               </a>
-            </div>
+            </div> */}
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              Joined Aug 2022
+              Joined {profileJoined}
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* Stats */}
@@ -89,15 +123,15 @@ const Profile = () => {
             <p className="text-xs text-muted-foreground">Subscribers</p>
           </div> */}
           <div className="text-center">
-            <p className="text-xl font-bold">543</p>
+            <p className="text-xl font-bold">1</p>
             <p className="text-xs text-muted-foreground">Videos</p>
           </div>
           <div className="text-center">
-            <p className="text-xl font-bold">128</p>
+            <p className="text-xl font-bold">2</p>
             <p className="text-xs text-muted-foreground">Articles</p>
           </div>
           <div className="text-center">
-            <p className="text-xl font-bold">5.2K</p>
+            <p className="text-xl font-bold">3</p>
             <p className="text-xs text-muted-foreground">Posts</p>
           </div>
         </div>
@@ -105,30 +139,22 @@ const Profile = () => {
         {/* Content Tabs */}
         <Tabs defaultValue="videos" className="w-full">
           <TabsList className="w-full">
-            <TabsTrigger value="videos" className="flex-1">
-              Videos
+            <TabsTrigger value="posts" className="flex-1">
+              Posts
             </TabsTrigger>
             <TabsTrigger value="articles" className="flex-1">
               Articles
             </TabsTrigger>
-            <TabsTrigger value="posts" className="flex-1">
-              Posts
+            <TabsTrigger value="videos" className="flex-1">
+              Videos
             </TabsTrigger>
+            {/* <TabsTrigger value="videos" className="flex-1">
+              Likes
+            </TabsTrigger>
+            <TabsTrigger value="videos" className="flex-1">
+              Bookmarks
+            </TabsTrigger> */}
           </TabsList>
-
-          <TabsContent value="videos" className="mt-6 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <VideoCard key={i} isGated={i % 2 === 0} />
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="articles" className="mt-6 space-y-4">
-            {[1, 2, 3].map((i) => (
-              <ArticleCard key={i} isGated={i % 2 === 0} />
-            ))}
-          </TabsContent>
 
           <TabsContent value="posts" className="mt-6 space-y-0">
             {[1, 2, 3].map((i) => (
@@ -136,6 +162,20 @@ const Profile = () => {
                 <PostCard />
               </div>
             ))}
+          </TabsContent>
+
+          <TabsContent value="articles" className="mt-6 space-y-4">
+            {[1, 2].map((i) => (
+              <ArticleCard key={i} isGated={i % 2 === 0} />
+            ))}
+          </TabsContent>
+
+          <TabsContent value="videos" className="mt-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1].map((i) => (
+                <VideoCard key={i} isGated={i % 2 === 0} />
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </div>

@@ -43,19 +43,19 @@ const CreateProfile = () => {
 
   const cleanUsername = (input: string) => {
     return input.replace(/^@+/, ""); // Remove any leading @ symbols
-  }
+  };
 
   const handleUsernameChange = async (input: string) => {
-    const cleaned = cleanUsername(input)
-    setUsername(cleaned)
+    const cleaned = cleanUsername(input);
+    setUsername(cleaned);
 
-    if(cleaned){
-      const exists = await checkUsername(cleaned)
+    if (cleaned) {
+      const exists = await checkUsername(cleaned);
       setUsernameError(exists ? "Username already taken, choose another one" : "");
     } else {
       setUsernameError("");
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,11 +73,17 @@ const CreateProfile = () => {
       return;
     }
 
+    const exists = await checkUsername(username);
+    if (exists) {
+      setLoading(false);
+      return;
+    }
+
     try {
       await createprofile(username, bio, address);
       setLoading(false);
       setIsProfileCreated(true);
-      navigate("/")
+      navigate("/");
     } catch (error: unknown) {
       console.log("Error while creating profile", error);
 

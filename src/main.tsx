@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         element: (
           <div className="flex flex-col md:flex-row w-full">
             <SidebarProvider className="w-[40%]">
-              <Navbar />
+              <Navbar  />
             </SidebarProvider>
             <Videos />
             <TrendingBar />
@@ -68,11 +68,11 @@ const router = createBrowserRouter([
         path: "/profile/me",
         element: (
           <div className="flex flex-col md:flex-row w-full">
-            <SidebarProvider className="w-[20%]">
+            <SidebarProvider className="w-[25rem]">
               <Navbar />
             </SidebarProvider>
             <Profile />
-            <TrendingBar />
+            {/* <TrendingBar /> */}
           </div>
         ),
       },
