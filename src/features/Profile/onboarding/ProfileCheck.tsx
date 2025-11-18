@@ -12,13 +12,15 @@ const ProfileCheck = () => {
       console.log("User wallet not connected");
       return;
     }
-    
+
     const CheckProfile = async () => {
       const profile = await getProfile(address);
 
       if (address && !profile) {
         navigate("/onboarding/profile");
       }
+
+      console.log({address, profile})
     };
 
     CheckProfile();

@@ -11,7 +11,6 @@ function App() {
         <SidebarProvider className="w-[40%]">
           <Navbar />
         </SidebarProvider>
-
         <Home />
         <TrendingBar />
       </div>

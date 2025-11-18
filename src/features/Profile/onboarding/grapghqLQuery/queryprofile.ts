@@ -34,3 +34,27 @@ export const getProfile = async (author: string) => {
     }
     return null
 };
+
+
+export async function checkUsername(username: string) {
+  const query = `
+    query {
+      transactions(
+        tags: [
+          { name: "app-id", values: ["${import.meta.env.VITE_APP_ID}"] }
+          { name: "type", values: ["${import.meta.env.VITE_TYPE_PROFILE}"] }
+          { name: "username", values: ["${username}"] }
+        ],
+        limit: 1
+      ) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  `;
+  const response = await axios.post(GRAPHQL_ENDPOINT, { query });
+  return response.data.data.transactions.edges.length > 0;
+};

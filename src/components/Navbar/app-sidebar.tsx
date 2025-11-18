@@ -20,6 +20,8 @@ import { useTheme } from "@/features/Dark_LightMode/theme-provider";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { getProfile } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
 
 const browseitems = [
   {
@@ -78,6 +80,26 @@ export function AppSidebar() {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const margin = address ? "0px" : "100px"
+  const[username, setUsername] = useState("")
+
+  useEffect(() => {
+
+    if (!address) {
+      return;
+    }
+
+    const fetchUserName = async () => {
+      const profile = await getProfile(address)
+
+      if(profile){
+        setUsername(profile.username)
+      } else {
+        setUsername("undefined")
+      }
+    }
+
+    fetchUserName()
+  }, [address])
 
   return (
     <Sidebar>
@@ -156,7 +178,7 @@ export function AppSidebar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuButton>
-                      <User2 /> Username
+                      <User2 /> {username}
                       <ChevronUp className="ml-auto" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
 import { createprofile } from "./create-profile";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { getProfile } from "./grapghqLQuery/queryprofile";
+import { checkUsername, getProfile } from "./grapghqLQuery/queryprofile";
 
 const CreateProfile = () => {
   const { address } = useAccount();
@@ -23,6 +23,7 @@ const CreateProfile = () => {
   const [loading, setLoading] = useState(false);
   const [isTXCancel, setTXCancel] = useState(false);
   const [isProfileCreated, setIsProfileCreated] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
 
   useEffect(() => {
     if (!address) {
@@ -38,7 +39,23 @@ const CreateProfile = () => {
     };
 
     checkprofile();
-  });
+  }, [address, navigate]);
+
+  const cleanUsername = (input: string) => {
+    return input.replace(/^@+/, ""); // Remove any leading @ symbols
+  }
+
+  const handleUsernameChange = async (input: string) => {
+    const cleaned = cleanUsername(input)
+    setUsername(cleaned)
+
+    if(cleaned){
+      const exists = await checkUsername(cleaned)
+      setUsernameError(exists ? "Username already taken, choose another one" : "");
+    } else {
+      setUsernameError("");
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +90,7 @@ const CreateProfile = () => {
     }
   };
 
-  const isValid = username.trim().length >= 3 && username.trim().length <= 20;
+  const isValid = username.trim().length >= 3 && username.trim().length <= 20 && usernameError === "";
 
   return (
     <div className="w-full h-screen flex flex-col items-center max-md:mt-[100px] md:justify-center">
@@ -116,12 +133,13 @@ const CreateProfile = () => {
                   Username <span className="text-primary">*</span>
                 </Label>
                 <div>
-                  <Input value={username} placeholder="username" maxLength={20} onChange={(e) => setUsername(e.target.value)} className="w-full pl-2 text-base h-11" />
+                  <Input value={username ? `@${username}` : ""} placeholder="@username" maxLength={20} onChange={(e) => handleUsernameChange(e.target.value)} className="w-full pl-2 text-base h-11" />
                 </div>
                 <div className="flex justify-between pt-1">
                   <p className="text-xs text-muted-foreground">3-20 characters, lowercase & numbers (without the @)</p>
                   <p className={`text-xs font-semibold ${isValid ? "text-primary" : "text-muted-foreground"}`}>{username.length}/20</p>
                 </div>
+                <p className="text-red-900">{usernameError}</p>
               </div>
 
               <div className=" w-full space-y-2">
@@ -143,7 +161,7 @@ const CreateProfile = () => {
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Connected Wallet</p>
                 <div className="w-full flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></div>
-                  <p className="text-[15px] font-mono max-sm:hidden">0x742d35Cc6634C0532925a3b844Bc69e4d0d8f3e</p>
+                  <p className="text-[15px] font-mono max-sm:hidden">{address}</p>
                 </div>
               </div>
 
