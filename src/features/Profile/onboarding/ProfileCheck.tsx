@@ -19,8 +19,6 @@ const ProfileCheck = () => {
       if (address && !profile) {
         navigate("/onboarding/profile");
       }
-
-      console.log({address, profile})
     };
 
     CheckProfile();

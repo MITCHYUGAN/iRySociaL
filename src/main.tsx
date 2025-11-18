@@ -17,6 +17,7 @@ import { SidebarProvider } from "./components/ui/sidebar.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import TrendingBar from "./components/Trending/TrendingBar.tsx";
 import ProfileCheck from "./features/Profile/onboarding/ProfileCheck.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,18 @@ const router = createBrowserRouter([
         ),
       },
       { path: "/onboarding/profile", element: <CreateProfile /> },
+      {
+        path: "/profile/me",
+        element: (
+          <div className="flex flex-col md:flex-row w-full">
+            <SidebarProvider className="w-[20%]">
+              <Navbar />
+            </SidebarProvider>
+            <Profile />
+            <TrendingBar />
+          </div>
+        ),
+      },
     ],
   },
 ]);

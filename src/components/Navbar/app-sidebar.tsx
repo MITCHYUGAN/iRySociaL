@@ -49,7 +49,7 @@ const browseitems = [
 const moreitems = [
   {
     title: "Profile",
-    url: "#",
+    url: "/profile/me",
     icon: User2,
   },
   {
