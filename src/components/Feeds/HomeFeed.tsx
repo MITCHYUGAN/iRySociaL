@@ -13,10 +13,10 @@ const HomeFeeds = () => {
           <TabsTrigger value="for-you" className="rounded-[0.4rem] p-1.5 cursor-pointer hover:bg-black focus:bg-black active:bg-black">
             For You
           </TabsTrigger>
-          <TabsTrigger value="following" className={tabSTyle}>
+          <TabsTrigger disabled value="following" className={tabSTyle}>
             Following
           </TabsTrigger>
-          <TabsTrigger value="trending" className={tabSTyle}>
+          <TabsTrigger disabled value="trending" className={tabSTyle}>
             Trending
           </TabsTrigger>
         </TabsList>

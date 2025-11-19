@@ -8,8 +8,77 @@ import { config } from "./lib/wagmi.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import CreateProfile from "./features/Profile/onboarding/CreateProfile.tsx";
+import Posts from "./pages/Post.tsx";
+import Articles from "./pages/Articles.tsx";
+import Videos from "./pages/Videos.tsx";
+import { SidebarProvider } from "./components/ui/sidebar.tsx";
+import Navbar from "./components/Navbar/Navbar.tsx";
+import TrendingBar from "./components/Trending/TrendingBar.tsx";
+import ProfileCheck from "./features/Profile/onboarding/ProfileCheck.tsx";
+import Profile from "./pages/Profile.tsx";
 
 const queryClient = new QueryClient();
+
+const router = createBrowserRouter([
+  {
+    element: <ProfileCheck />,
+    children: [
+      { path: "/", element: <Navigate to="/home" /> },
+      { path: "/home", element: <App /> },
+      {
+        path: "/posts",
+        element: (
+          <div className="flex flex-col md:flex-row w-full">
+            <SidebarProvider className="w-[40%]">
+              <Navbar />
+            </SidebarProvider>
+            <Posts />
+            <TrendingBar />
+          </div>
+        ),
+      },
+      {
+        path: "/articles",
+        element: (
+          <div className="flex flex-col md:flex-row w-full">
+            <SidebarProvider className="w-[40%]">
+              <Navbar />
+            </SidebarProvider>
+            <Articles />
+            <TrendingBar />
+          </div>
+        ),
+      },
+      {
+        path: "/videos",
+        element: (
+          <div className="flex flex-col md:flex-row w-full">
+            <SidebarProvider className="w-[40%]">
+              <Navbar  />
+            </SidebarProvider>
+            <Videos />
+            <TrendingBar />
+          </div>
+        ),
+      },
+      { path: "/onboarding/profile", element: <CreateProfile /> },
+      {
+        path: "/profile/:username",
+        element: (
+          <div className="flex flex-col md:flex-row w-full">
+            <SidebarProvider className=" w-[40%] lg:w-[26%]">
+              <Navbar />
+            </SidebarProvider>
+            <Profile />
+            {/* <TrendingBar /> */}
+          </div>
+        ),
+      },
+    ],
+  },
+]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,7 +92,7 @@ createRoot(document.getElementById("root")!).render(
               borderRadius: "small",
             })}
           >
-            <App />
+            <RouterProvider router={router} />
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>

@@ -21,6 +21,6 @@ const irys: Chain = {
 
 export const config = getDefaultConfig({
   appName: "iRySocial",
-  projectId: "irysocial",
+  projectId: "YOUR_PROJECT_ID",
   chains: [mainnet, polygon, optimism, arbitrum, base, irys],
 });

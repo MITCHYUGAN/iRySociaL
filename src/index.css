@@ -186,13 +186,13 @@
   border-right-style: var(--tw-border-style);
   border-right-width: 0.5px;
   /* border-color: rgba(33, 33, 33, 0.69); */
-  border-color: rgba(25, 25, 25, 0.69);
+  border-color: rgba(45, 45, 45, 0.69);
 }
 /* Sidebar border styling mobile*/
 .border-r {
   border-right-style: var(--tw-border-style);
   border-right-width: 0.5px;
-  border-color: rgba(33, 33, 33, 0.69);
+  border-color: rgba(38, 38, 38, 0.69);
 }
 
 
