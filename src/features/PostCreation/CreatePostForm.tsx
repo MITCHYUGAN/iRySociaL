@@ -28,6 +28,8 @@ const CreatePostForm = () => {
             onBlur={() => setIsfocused(false)}
           />
 
+          <input type="file" placeholder="Upload a image" />
+
           {isFocused && (
             <div className="flex justify-between">
               <div className="flex gap-5">

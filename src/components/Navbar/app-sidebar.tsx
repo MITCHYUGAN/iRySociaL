@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { getProfile } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
 import logoDark from "@/assets/irysocial_logo_dark.png"
 import logoLight from "@/assets/irysocial_logo.png"
+import CreateModal from "../modal/CreateModal";
 
 const browseitems = [
   {
@@ -55,6 +56,7 @@ export function AppSidebar() {
   const { disconnect } = useDisconnect();
   const margin = address ? "0px" : "100px";
   const [username, setUsername] = useState("");
+  const [openCreateModal, setOpenCreateModal] = useState(false)
 
   const moreitems = [
   {
@@ -166,10 +168,12 @@ export function AppSidebar() {
 
         {address && (
           <SidebarGroup>
-            <Button className="button">
+            <Button className="button" onClick={() => setOpenCreateModal(true)}>
               {" "}
               <PlusCircle /> Create
             </Button>
+
+            <CreateModal open={openCreateModal} onOpenChange={setOpenCreateModal} />
           </SidebarGroup>
         )}
       </SidebarContent>
