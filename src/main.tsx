@@ -65,10 +65,10 @@ const router = createBrowserRouter([
       },
       { path: "/onboarding/profile", element: <CreateProfile /> },
       {
-        path: "/profile/me",
+        path: "/profile/:username",
         element: (
           <div className="flex flex-col md:flex-row w-full">
-            <SidebarProvider className="w-[25rem]">
+            <SidebarProvider className=" w-[40%] lg:w-[26%]">
               <Navbar />
             </SidebarProvider>
             <Profile />

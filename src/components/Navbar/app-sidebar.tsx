@@ -22,6 +22,8 @@ import { useAccount, useDisconnect } from "wagmi";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { getProfile } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
+import logoDark from "@/assets/irysocial_logo_dark.png"
+import logoLight from "@/assets/irysocial_logo.png"
 
 const browseitems = [
   {
@@ -46,10 +48,18 @@ const browseitems = [
   },
 ];
 
-const moreitems = [
+export function AppSidebar() {
+  const { theme } = useTheme();
+  const { toggleSidebar } = useSidebar();
+  const { address } = useAccount();
+  const { disconnect } = useDisconnect();
+  const margin = address ? "0px" : "100px";
+  const [username, setUsername] = useState("");
+
+  const moreitems = [
   {
     title: "Profile",
-    url: "/profile/me",
+    url: `/profile/${username}`,
     icon: User2,
   },
   {
@@ -74,32 +84,28 @@ const moreitems = [
   },
 ];
 
-export function AppSidebar() {
-  const { theme } = useTheme();
-  const { toggleSidebar } = useSidebar();
-  const { address } = useAccount();
-  const { disconnect } = useDisconnect();
-  const margin = address ? "0px" : "100px"
-  const[username, setUsername] = useState("")
-
   useEffect(() => {
-
     if (!address) {
       return;
     }
 
     const fetchUserName = async () => {
-      const profile = await getProfile(address)
+      try {
+        const profile = await getProfile(address);
+        console.log("Profile", profile);
 
-      if(profile){
-        setUsername(profile.username)
-      } else {
-        setUsername("undefined")
+        if (profile) {
+          setUsername(profile.username);
+        } else {
+          setUsername("undefined");
+        }
+      } catch (error) {
+        console.error("Error while fetching profile", error)
       }
-    }
+    };
 
-    fetchUserName()
-  }, [address])
+    fetchUserName();
+  }, [address]);
 
   return (
     <Sidebar>
@@ -108,7 +114,7 @@ export function AppSidebar() {
         <div className="flex flex-col items-start mt-5 gap-5">
           <a href="/home">
             <div className="sidebar_logo">
-              {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
+              {theme === "light" ? <img className="w-50 " src={logoDark} alt="" /> : <img className="w-50" src={logoLight} alt="" />}
             </div>
           </a>
           <InputGroup>
@@ -166,7 +172,6 @@ export function AppSidebar() {
             </Button>
           </SidebarGroup>
         )}
-        
       </SidebarContent>
       <SidebarFooter className="flex flex-col items-center justify-center">
         <div className={`flex items-center gap-3 mb-[${margin}] `}>
@@ -184,7 +189,9 @@ export function AppSidebar() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
                     <DropdownMenuItem>
-                      <Button className="cursor-pointer" variant={"destructive"} onClick={() => disconnect()}>Sign out</Button>
+                      <Button className="cursor-pointer" variant={"destructive"} onClick={() => disconnect()}>
+                        Sign out
+                      </Button>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

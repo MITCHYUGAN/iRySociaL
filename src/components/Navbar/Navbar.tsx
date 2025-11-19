@@ -3,6 +3,9 @@ import { useSidebar } from "../ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "@/features/Dark_LightMode/theme-provider";
 
+import logoDark from "@/assets/irysocial_logo_dark.png";
+import logoLight from "@/assets/irysocial_logo.png";
+
 const Navbar = ({ children }: { children?: React.ReactNode }) => {
   const { toggleSidebar } = useSidebar();
   const { theme } = useTheme();
@@ -16,7 +19,7 @@ const Navbar = ({ children }: { children?: React.ReactNode }) => {
           <AvatarFallback>🥷</AvatarFallback>
         </Avatar>
         <div className="sidebar_logo w-[200px] md:hidden self-center">
-          {theme === "light" ? <img className="w-50 " src="src/assets/irysocial_logo_dark.png" alt="" /> : <img className="w-50" src="src/assets/irysocial_logo.png" alt="" />}
+          {theme === "light" ? <img className="w-50 " src={logoDark} alt="" /> : <img className="w-50" src={logoLight} alt="" />}
         </div>
         {children}
       </main>
