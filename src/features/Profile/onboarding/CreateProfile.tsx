@@ -112,6 +112,17 @@ const CreateProfile = () => {
           <EmptyContent>
             <ConnectButton />
           </EmptyContent>
+          <Button
+            variant="link"
+            className="cursor-pointer"
+            onClick={() => {
+              navigate("/");
+              disconnect();
+            }}
+          >
+            <ArrowLeft />
+            Back
+          </Button>
         </Empty>
       ) : (
         <div className="flex flex-col gap-[50px] max-md:p-7">

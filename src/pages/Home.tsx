@@ -1,5 +1,5 @@
 import HomeFeeds from "@/components/Feeds/HomeFeed";
-import CreatePostForm from "@/features/PostCreation/CreatePostForm";
+import CreatePostForm from "@/features/CreatePost/CreatePostForm";
 
 const Home = () => {
 

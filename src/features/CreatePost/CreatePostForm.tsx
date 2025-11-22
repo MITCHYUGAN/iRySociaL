@@ -12,7 +12,7 @@ const CreatePostForm = () => {
     console.log("Post Value", postValue);
   };
   return (
-    <section className="flex flex-col gap-10" aria-label="mainfeed whats on your mind">
+    <section className=" w-full flex flex-col gap-10" aria-label="mainfeed whats on your mind">
       <div className="flex gap-5">
         <Avatar className="w-[50px] h-[50px] hidden md:block self-start">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -22,13 +22,13 @@ const CreatePostForm = () => {
           <Textarea
             value={postValue}
             onChange={(e) => setValue(e.target.value)}
-            className="min-h-[60px]"
+            className="min-h-[70px]"
             placeholder="What's on your mind?"
             onFocus={() => setIsfocused(true)}
             onBlur={() => setIsfocused(false)}
           />
 
-          <input type="file" placeholder="Upload a image" />
+          {/* <input type="file" placeholder="Upload a image" /> */}
 
           {isFocused && (
             <div className="flex justify-between">

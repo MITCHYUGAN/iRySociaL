@@ -18,6 +18,7 @@ import Navbar from "./components/Navbar/Navbar.tsx";
 import TrendingBar from "./components/Trending/TrendingBar.tsx";
 import ProfileCheck from "./features/Profile/onboarding/ProfileCheck.tsx";
 import Profile from "./pages/Profile.tsx";
+import CreatePostPage from "./features/CreatePost/CreatePostPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
         element: (
           <div className="flex flex-col md:flex-row w-full">
             <SidebarProvider className="w-[40%]">
-              <Navbar  />
+              <Navbar />
             </SidebarProvider>
             <Videos />
             <TrendingBar />
@@ -75,6 +76,11 @@ const router = createBrowserRouter([
             {/* <TrendingBar /> */}
           </div>
         ),
+      },
+
+      {
+        path: "/create/post",
+        element: <CreatePostPage />,
       },
     ],
   },
