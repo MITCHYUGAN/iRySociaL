@@ -74,6 +74,7 @@ const CreateProfile = () => {
     }
 
     const exists = await checkUsername(username);
+    
     if (exists) {
       setLoading(false);
       return;
