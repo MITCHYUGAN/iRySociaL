@@ -5,17 +5,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAccount } from "wagmi";
+import DOMPurify from "dompurify";
 
 interface PostCardProps {
   featured?: boolean;
+  content: string
 }
 
-export function PostCard({ featured = false }: PostCardProps) {
+export function PostCard({ featured = false, content }: PostCardProps) {
   const { address } = useAccount();
 
   return (
     <div
-      className={`bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
+      className={`md:max-w-[700px] lg:max-w-[1000px] bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
         featured ? "ring-2 ring-accent/30" : ""
       }`}
     >
@@ -48,18 +50,25 @@ export function PostCard({ featured = false }: PostCardProps) {
       </div>
 
       {/* Content */}
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <p className="text-foreground">Just launched our new feature that lets creators monetize their content directly. This changes everything for independent creators! 🚀</p>
-      </div>
+      </div> */}
+
+      <div
+        className="post-content flex items-center gap-3 flex-wrap overflow-hidden"
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(content),
+        }}
+      />
 
       {/* Image */}
-      <div className="mb-3 rounded-lg overflow-hidden bg-secondary h-64">
+      {/* <div className="mb-3 rounded-lg overflow-hidden bg-secondary h-64">
         <img
           src="https://images.unsplash.com/photo-1584432743501-7d5c27a39189?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bmljZSUyMHZpZXd8ZW58MHx8MHx8fDA%3D"
           alt="Post image"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
         />
-      </div>
+      </div> */}
 
       {/* Engagement */}
       <div className="flex gap-8 text-muted-foreground mb-3 border-t border-border pt-3">

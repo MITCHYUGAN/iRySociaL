@@ -1,6 +1,5 @@
 import { graphqlQuery } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
 import axios from "axios";
-// import { APP_ID } from "../components/NoteModal";
 
 interface NodeProps {
   id: string;
@@ -45,7 +44,7 @@ export const getPosts = async () => {
       const { id } = edge.node;
       const { tags } = edge.node;
 
-      console.log("edge.node", edge.node);
+      // console.log("edge.node", edge.node);
       const contentResponse = await axios.get(`${GATEWAY_URL}/${id}`, {
         responseType: "text",
       });

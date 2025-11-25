@@ -11,7 +11,6 @@ import { createpost } from "./create-post";
 import { getProfile } from "../Profile/onboarding/grapghqLQuery/queryprofile";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
-import { getPosts } from "./grapghqLQuery/queryposts";
 
 // interface CreatePostFormProps {
 //   classname: string;
@@ -48,18 +47,7 @@ const CreatePostForm = () => {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    if (!address) {
-      return;
-    }
-    const fetchPost = async () => {
-      const posts = await getPosts();
 
-      console.log("User Post", posts)
-    };
-
-    fetchPost()
-  });
 
   useEffect(() => {
     if (!address) {
@@ -117,7 +105,7 @@ const CreatePostForm = () => {
 
     const imagesHTML = medias.map((src) => `<img src="${src}" />`).join("");
 
-    const dataToUpload = `<p>${content}</p>${imagesHTML}`;
+    const dataToUpload = `<p>${content}</p> <div>${imagesHTML}</div>`;
 
     console.log("dataatateup", dataToUpload);
     try {
