@@ -6,6 +6,7 @@
 
 .post-content img {
   width: 100%;
+  /* width: min(200px, 100); */
   object-fit: cover;
   border-radius: 10px;
   border: 1px solid rgba(38, 38, 38, 0.69);
@@ -17,10 +18,12 @@
 }
 
 .post-content div{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* display: grid; */
+  /* grid-template-columns: 1fr 1fr; */
+  display: flex;
   gap: 20px;
   /* height: 200px; */
+  overflow: scroll;
 }
 
 .post-content:nth-child(3) {

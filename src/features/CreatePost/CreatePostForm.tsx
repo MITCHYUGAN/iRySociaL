@@ -76,6 +76,13 @@ const CreatePostForm = () => {
   }, [content]);
 
   const handleCreatePost = async () => {
+    // Make wallet is connect
+    if (!address) {
+      setLoading(false);
+      alert("Wallet not connected");
+      return;
+    }
+
     if (!content && media.length === 0) {
       alert("Pls input a valid content");
       console.log("Mediiaiis", media.length);
@@ -83,13 +90,6 @@ const CreatePostForm = () => {
     }
 
     setLoading(true);
-
-    // Make wallet is connect
-    if (!address) {
-      setLoading(false);
-      alert("Wallet not connected");
-      return;
-    }
 
     // make sure the wallet connected has a profile
     const { username, author } = await getProfile(address);
