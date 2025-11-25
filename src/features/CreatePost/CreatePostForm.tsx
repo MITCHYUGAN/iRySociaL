@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 // import { Textarea } from "@/components/ui/textarea";
-import { Smile, ImageIcon, X } from "lucide-react";
+import { Smile, ImageIcon, X, AlertCircleIcon, XIcon, CheckCircle2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 // import { Label } from "@/components/ui/label";
@@ -9,6 +9,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useAccount } from "wagmi";
 import { createpost } from "./create-post";
 import { getProfile } from "../Profile/onboarding/grapghqLQuery/queryprofile";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Spinner } from "@/components/ui/spinner";
 
 // interface CreatePostFormProps {
 //   classname: string;
@@ -17,263 +19,18 @@ import { getProfile } from "../Profile/onboarding/grapghqLQuery/queryprofile";
 interface MediaPreview {
   file: File;
   preview: string;
-  type: "image" | "video"; // Track whether it's an image or video
+  base64: string;
+  type: "image";
 }
 
-// const CreatePostForm = ({ classname }: CreatePostFormProps) => {
-//   const [isFocused, setIsFocused] = useState(false)
-//   const [content, setContent] = useState("")
-//   const [media, setMedia] = useState<MediaPreview[]>([])
-//   const fileInputRef = useRef<HTMLInputElement>(null)
-
-//   useEffect(() => {
-//     return () => {
-//       media.forEach((item) => URL.revokeObjectURL(item.preview))
-//     }
-//   }, [media])
-
-//   const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const files = e.target.files
-//     if (files) {
-//       const newMedia = Array.from(files).map((file) => ({
-//         file,
-//         preview: URL.createObjectURL(file),
-//         type: file.type.startsWith("video/") ? ("video" as const) : ("image" as const),
-//       }))
-//       setMedia((prev) => [...prev, ...newMedia])
-//     }
-//     e.target.value = ""
-//   }
-
-//   const removeMedia = (index: number) => {
-//     URL.revokeObjectURL(media[index].preview)
-//     setMedia((prev) => prev.filter((_, i) => i !== index))
-//   }
-
-//   const addEmoji = (emoji: string) => {
-//     setContent((prev) => prev + emoji)
-//   }
-
-//   const handleSubmit = () => {
-//     console.log("Submitting Post:", {
-//       text: content,
-//       mediaCount: media.length,
-//       media: media.map((item) => ({
-//         name: item.file.name,
-//         size: item.file.size,
-//         type: item.file.type,
-//         mediaType: item.type, // 'image' or 'video'
-//         file: item.file, // The actual file object you'll upload
-//       })),
-//     })
-
-//     media.forEach((item) => URL.revokeObjectURL(item.preview))
-//     setContent("")
-//     setMedia([])
-//     setIsFocused(false)
-//   }
-
-//   const triggerMediaUpload = () => {
-//     fileInputRef.current?.click()
-//   }
-
-//   return (
-//     <div className={`space-y-3 ${classname}`}>
-//       <div className="flex gap-4">
-//         <Avatar className="h-12 w-12">
-//           <AvatarImage src="https://github.com/shadcn.png" />
-//           <AvatarFallback>U</AvatarFallback>
-//         </Avatar>
-//         <div className="flex-1 space-y-4">
-//           <div className={`${isFocused ? "min-h-[120px]" : ""} transition-all`}>
-//             <Textarea
-//               value={content}
-//               onChange={(e) => setContent(e.target.value)}
-//               placeholder="What's on your mind?"
-//               className="min-h-[48px] resize-none bg-transparent border-none p-0 text-lg placeholder:text-muted-foreground focus-visible:ring-0 shadow-none"
-//               onFocus={() => setIsFocused(true)}
-//             />
-//             {media.length > 0 && (
-//               <div className="grid grid-cols-2 gap-2 mt-4">
-//                 {media.map((item, index) => (
-//                   <div
-//                     key={index}
-//                     className="relative group rounded-xl overflow-hidden bg-secondary/30 border border-border"
-//                   >
-//                     <div className="aspect-video relative">
-//                       {item.type === "image" ? (
-//                         <img
-//                           src={item.preview || "/placeholder.svg"}
-//                           alt={`Upload ${index + 1}`}
-//                           className="w-full h-full object-cover"
-//                         />
-//                       ) : (
-//                         <video src={item.preview} className="w-full h-full object-cover" controls />
-//                       )}
-//                     </div>
-//                     <button
-//                       onClick={() => removeMedia(index)}
-//                       className="absolute top-2 right-2 p-1 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors"
-//                     >
-//                       <X className="w-4 h-4" />
-//                     </button>
-//                   </div>
-//                 ))}
-//               </div>
-//             )}
-//           </div>
-//           {(isFocused || content || media.length > 0) && (
-//             <div className="flex items-center justify-between border-t border-border pt-3">
-//               <div className="flex gap-2">
-//                 <input
-//                   type="file"
-//                   multiple
-//                   accept="image/*,video/*"
-//                   className="hidden"
-//                   ref={fileInputRef}
-//                   onChange={handleMediaUpload}
-//                 />
-//                 <button
-//                   onClick={triggerMediaUpload}
-//                   className="p-2 hover:bg-teal-500/10 rounded-full transition text-teal-500"
-//                   title="Media"
-//                 >
-//                   <ImageIcon className="w-5 h-5" />
-//                 </button>
-//                 <Popover>
-//                   <PopoverTrigger asChild>
-//                     <button className="p-2 hover:bg-teal-500/10 rounded-full transition text-teal-500">
-//                       <Smile className="w-5 h-5" />
-//                     </button>
-//                   </PopoverTrigger>
-//                   <PopoverContent className="w-full p-2" align="start">
-//                     <div className="flex gap-2 flex-wrap max-w-[200px]">
-//                       {["😀", "😂", "🥰", "😎", "🤔", "🔥", "✨", "🎉", "👍", "❤️", "🚀", "💯"].map((emoji) => (
-//                         <button
-//                           key={emoji}
-//                           onClick={() => addEmoji(emoji)}
-//                           className="p-2 hover:bg-secondary rounded text-xl"
-//                         >
-//                           {emoji}
-//                         </button>
-//                       ))}
-//                     </div>
-//                   </PopoverContent>
-//                 </Popover>
-//               </div>
-//               <Button
-//                 onClick={handleSubmit}
-//                 disabled={!content && media.length === 0}
-//                 className="bg-teal-500 hover:bg-teal-600 text-white rounded-full px-6 font-bold"
-//               >
-//                 Post
-//               </Button>
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default CreatePostForm;
-
-//   // return (
-//   //   <div className={`space-y-3 ${classname}`}>
-//   //     <div className="flex gap-4">
-//   //       <Avatar className="h-12 w-12">
-//   //         <AvatarImage src="https://github.com/shadcn.png" />
-//   //         <AvatarFallback>U</AvatarFallback>
-//   //       </Avatar>
-//   //       <div className="flex-1 space-y-4">
-//   //         <div className={`${isFocused ? "min-h-[120px]" : ""} transition-all`}>
-//   //           <Textarea
-//   //             value={content}
-//   //             onChange={(e) => setContent(e.target.value)}
-//   //             placeholder="What's on your mind?"
-//   //             className="min-h-[48px] resize-none bg-transparent border-none p-0 text-lg placeholder:text-muted-foreground focus-visible:ring-0 shadow-none"
-//   //             onFocus={() => setIsFocused(true)}
-//   //           />
-//   //           {images.length > 0 && (
-//   //             <div className="grid grid-cols-2 gap-2 mt-4">
-//   //               {images.map((img, index) => (
-//   //                 <div
-//   //                   key={index}
-//   //                   className="relative group rounded-xl overflow-hidden bg-secondary/30 border border-border"
-//   //                 >
-//   //                   <div className="aspect-video relative">
-//   //                     <img
-//   //                       src={img.preview || "/placeholder.svg"}
-//   //                       alt={`Upload ${index + 1}`}
-//   //                       className="w-full h-full object-cover"
-//   //                     />
-//   //                   </div>
-//   //                   <button
-//   //                     onClick={() => removeImage(index)}
-//   //                     className="absolute top-2 right-2 p-1 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors"
-//   //                   >
-//   //                     <X className="w-4 h-4" />
-//   //                   </button>
-//   //                 </div>
-//   //               ))}
-//   //             </div>
-//   //           )}
-//   //         </div>
-//   //         {(isFocused || content || images.length > 0) && (
-//   //           <div className="flex items-center justify-between border-t border-border pt-3">
-//   //             <div className="flex gap-2">
-//   //               <input
-//   //                 type="file"
-//   //                 multiple
-//   //                 accept="image/*"
-//   //                 className="hidden"
-//   //                 ref={fileInputRef}
-//   //                 onChange={handleImageUpload}
-//   //               />
-//   //               <button
-//   //                 onClick={triggerImageUpload}
-//   //                 className="p-2 hover:bg-teal-500/10 rounded-full transition text-teal-500"
-//   //                 title="Media"
-//   //               >
-//   //                 <ImageIcon className="w-5 h-5" />
-//   //               </button>
-//   //               <Popover>
-//   //                 <PopoverTrigger asChild>
-//   //                   <button className="p-2 hover:bg-teal-500/10 rounded-full transition text-teal-500">
-//   //                     <Smile className="w-5 h-5" />
-//   //                   </button>
-//   //                 </PopoverTrigger>
-//   //                 <PopoverContent className="w-full p-2" align="start">
-//   //                   <div className="flex gap-2 flex-wrap max-w-[200px]">
-//   //                     {["😀", "😂", "🥰", "😎", "🤔", "🔥", "✨", "🎉", "👍", "❤️", "🚀", "💯"].map((emoji) => (
-//   //                       <button
-//   //                         key={emoji}
-//   //                         onClick={() => addEmoji(emoji)}
-//   //                         className="p-2 hover:bg-secondary rounded text-xl"
-//   //                       >
-//   //                         {emoji}
-//   //                       </button>
-//   //                     ))}
-//   //                   </div>
-//   //                 </PopoverContent>
-//   //               </Popover>
-//   //             </div>
-//   //             <Button
-//   //               onClick={handleSubmit}
-//   //               disabled={!content && images.length === 0}
-//   //               className="bg-teal-500 hover:bg-teal-600 text-white rounded-full px-6 font-bold"
-//   //             >
-//   //               Post
-//   //             </Button>
-//   //           </div>
-//   //         )}
-//   //       </div>
-//   //     </div>
-//   //   </div>
-//   // )
-
-//
-// };
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (err) => reject(err);
+  });
+};
 
 const emojis = ["🔥", "🤝", "😅", "😂", "💚", "🥷", "💙", "🔗", "❤️", "🗑️", "👇", "🔎", "🥲"];
 
@@ -282,9 +39,32 @@ const CreatePostForm = () => {
   const [content, setContent] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [media, setMedia] = useState<MediaPreview[]>([]);
-  const {address} = useAccount()
+  const { address } = useAccount();
+  const [isTXCancel, setTXCancel] = useState(false);
+  const [isProfileCreated, setIsProfileCreated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (!address) {
+      return;
+    }
+
+    const fetchProfile = async () => {
+      const { username, author } = await getProfile(address);
+
+      if (!username && !author) {
+        alert("Profile not found");
+        setLoading(false);
+        setIsValid(false);
+        return;
+      }
+    };
+
+    fetchProfile();
+  }, [address]);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -294,35 +74,60 @@ const CreatePostForm = () => {
   }, [content]);
 
   const handleCreatePost = async () => {
+    if (!content && media.length === 0) {
+      alert("Pls input a valid content");
+      console.log("Mediiaiis", media.length)
+      return;
+    }
+
+    setLoading(true);
 
     // Make wallet is connect
     if (!address) {
-      // setLoading(false);
+      setLoading(false);
       alert("Wallet not connected");
       return;
     }
 
     // make sure the wallet connected has a profile
-    const {username, author} = await getProfile(address)
+    const { username, author } = await getProfile(address);
 
-    if (!username && !author) {
-      alert("Profile not found")
-      return
+    if (!isValid) {
+      alert("Profile not found");
+      setLoading(false);
+      return;
     }
 
+    const medias = media.map((m) => m.base64);
+    console.log("Medias", medias);
 
-    const medias = media[0].preview;
+    const imagesHTML = medias.map((src) => `<img src="${src}" />`).join("");
 
-    const dataToUpload = `<p>${content}</p><img src="${medias}">`;
+    const dataToUpload = `<p>${content}</p>${imagesHTML}`;
 
-    console.log("dataatateup", dataToUpload)
-
+    console.log("dataatateup", dataToUpload);
     try {
-      const postId = await createpost(dataToUpload, author, username )
-      console.log("POSTID", postId)
+      const postId = await createpost(dataToUpload, author, username);
+      console.log("POSTID", postId);
+
+      setTimeout(function () {
+        setIsProfileCreated(true);
+      }, 1000);
+
+      setLoading(false);
+
+      return;
     } catch (error) {
       console.error("Error while creating post", error);
-      return
+
+      if (error instanceof Error && error.message.includes("user rejected action")) {
+        setTimeout(function () {
+          setTXCancel(true);
+        }, 1000);
+      }
+
+      setLoading(false);
+      return;
     }
   };
 
@@ -330,18 +135,23 @@ const CreatePostForm = () => {
     setContent((prev) => prev + emoji);
   };
 
-  const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    if (!files) return;
 
-    if (files) {
-      const newMedia = Array.from(files).map((file) => ({
-        file,
-        preview: URL.createObjectURL(file),
-        type: file.type.startsWith("video/") ? ("video" as const) : ("image" as const),
-      }));
+    const processed = await Promise.all(
+      Array.from(files).map(async (file) => {
+        const base64 = await fileToBase64(file); // 🔥 convert here
+        return {
+          file,
+          preview: URL.createObjectURL(file),
+          base64, // 🔥 store base64
+          type: file.type.startsWith("video/") ? "video" : "image",
+        };
+      })
+    );
 
-      setMedia((prev) => [...prev, ...newMedia]);
-    }
+    setMedia((prev) => [...prev, ...processed]);
 
     e.target.value = "";
   };
@@ -378,11 +188,7 @@ const CreatePostForm = () => {
                 {media.map((item, index) => (
                   <div key={index} className="relative group rounded-xl overflow-hidden bg-secondary/30 border border-border">
                     <div className="aspect-video relative">
-                      {item.type === "image" ? (
-                        <img src={item.preview || "/placeholder.svg"} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
-                      ) : (
-                        <video src={item.preview} className="w-full h-full object-cover" controls />
-                      )}
+                      <img src={item.preview || "/placeholder.svg"} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
                     </div>
                     <button onClick={() => removeMedia(index)} className="absolute top-2 right-2 p-1 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors">
                       <X className="w-4 h-4" />
@@ -397,7 +203,7 @@ const CreatePostForm = () => {
             <div className="flex justify-between">
               <div className="flex gap-5">
                 <div>
-                  <input type="file" accept="image/*, video/*" className="hidden" ref={fileInputRef} onChange={handleMediaUpload} />
+                  <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleMediaUpload} />
 
                   <button onClick={triggerMediaUpload} className="p-[10px] hover:bg-[#171717] cursor-pointer rounded-[10px] transition text-primary" title="Media">
                     <ImageIcon />
@@ -429,13 +235,50 @@ const CreatePostForm = () => {
                 </Popover>
                 {/* <Video /> */}
               </div>
-              <Button className="cursor-pointer" onClick={handleCreatePost}>
-                Post
+
+              <Button disabled={!isValid || loading} className="cursor-pointer py-6" onClick={handleCreatePost}>
+                {loading ? (
+                  <>
+                    <Spinner />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Post"
+                )}
               </Button>
             </div>
           )}
         </div>
       </div>
+
+      {isTXCancel && (
+        <Alert variant={"destructive"} className="w-[60%] z-100 md:w-[400px] absolute bottom-20 right-6">
+          <AlertCircleIcon />
+          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setTXCancel(false)}>
+            <XIcon className="size-5" />
+            <span className="sr-only">Close</span>
+          </button>
+          <AlertTitle className="max-md:text-[15px]">TX Cancelled</AlertTitle>
+          <AlertDescription className="max-md:text-[12px] text-gray-400">User cancelled the transaction</AlertDescription>
+        </Alert>
+      )}
+
+      {isProfileCreated && (
+        <Alert variant={"default"} className="w-[60%] z-100 md:w-[400px] absolute bottom-20 right-6 border-primary">
+          <CheckCircle2Icon className="text-primary" />
+          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsProfileCreated(false)}>
+            <XIcon className="size-5" />
+            <span className="sr-only">Close</span>
+          </button>
+          <AlertTitle className="max-md:text-[15px] text-primary">Successful</AlertTitle>
+          <AlertDescription className="max-md:text-[12px]">
+            Your post has been uploaded successfully
+            <a className="text-primary underline" target="blank_" href="https://gateway.irys.xyz/AZzqVLk4WgymrDYrrkxq4t8cym8qCbPkivay2UKsnPKC">
+              View here
+            </a>
+          </AlertDescription>
+        </Alert>
+      )}
     </section>
   );
 };
