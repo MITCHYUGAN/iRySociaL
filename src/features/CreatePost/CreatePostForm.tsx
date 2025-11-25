@@ -11,6 +11,7 @@ import { createpost } from "./create-post";
 import { getProfile } from "../Profile/onboarding/grapghqLQuery/queryprofile";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
+import { getPosts } from "./grapghqLQuery/queryposts";
 
 // interface CreatePostFormProps {
 //   classname: string;
@@ -51,6 +52,19 @@ const CreatePostForm = () => {
     if (!address) {
       return;
     }
+    const fetchPost = async () => {
+      const posts = await getPosts();
+
+      console.log("User Post", posts)
+    };
+
+    fetchPost()
+  });
+
+  useEffect(() => {
+    if (!address) {
+      return;
+    }
 
     const fetchProfile = async () => {
       const { username, author } = await getProfile(address);
@@ -76,7 +90,7 @@ const CreatePostForm = () => {
   const handleCreatePost = async () => {
     if (!content && media.length === 0) {
       alert("Pls input a valid content");
-      console.log("Mediiaiis", media.length)
+      console.log("Mediiaiis", media.length);
       return;
     }
 
