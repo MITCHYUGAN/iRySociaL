@@ -4,6 +4,32 @@
 @custom-variant dark (&:is(.dark *));
 @tailwind utilities;
 
+.post-content img {
+  width: 100%;
+  /* width: min(200px, 100); */
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(38, 38, 38, 0.69);
+  height: 200px;
+}
+
+.post-content p{
+  font-size: 20px;
+}
+
+.post-content div{
+  /* display: grid; */
+  /* grid-template-columns: 1fr 1fr; */
+  display: flex;
+  gap: 20px;
+  /* height: 200px; */
+  overflow: scroll;
+}
+
+.post-content:nth-child(3) {
+  display: none;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -195,6 +221,9 @@
   border-color: rgba(38, 38, 38, 0.69);
 }
 
+.border {
+  border: 1px solid rgba(38, 38, 38, 0.69);
+}
 
 /* SIdebar Mobile Height */
 .min-h-svh {

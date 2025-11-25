@@ -3,7 +3,7 @@ import { MessageSquare } from "lucide-react";
 
 const Posts = () => {
   return (
-    <div className="w-full pt-5 lg:py-10 px-5">
+    <div className="w-full overflow-hidden pt-5 lg:py-10 px-5">
       <div className="flex gap-4 flex-col">
         <div className="flex items-center gap-3">
           <MessageSquare className="text-primary" />

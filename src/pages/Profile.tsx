@@ -48,7 +48,7 @@ const Profile = () => {
         });
 
         setProfileJoined(date);
-        
+
         if (profile.author === address) {
           setOwner(true);
         }
@@ -144,17 +144,19 @@ const Profile = () => {
             <p className="text-xl font-bold">2.3M</p>
             <p className="text-xs text-muted-foreground">Subscribers</p>
           </div> */}
+
               <div className="text-center">
-                <p className="text-xl font-bold">1</p>
-                <p className="text-xs text-muted-foreground">Videos</p>
+                <p className="text-xl font-bold">3</p>
+                <p className="text-xs text-muted-foreground">Posts</p>
               </div>
+
               <div className="text-center">
                 <p className="text-xl font-bold">2</p>
                 <p className="text-xs text-muted-foreground">Articles</p>
               </div>
               <div className="text-center">
-                <p className="text-xl font-bold">3</p>
-                <p className="text-xs text-muted-foreground">Posts</p>
+                <p className="text-xl font-bold">1</p>
+                <p className="text-xs text-muted-foreground">Videos</p>
               </div>
             </div>
 
