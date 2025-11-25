@@ -8,7 +8,8 @@ function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
-        <SidebarProvider className="w-[400px]">
+        <SidebarProvider className="w-[50%]">
+        {/* <SidebarProvider className="w-[400px]"> */}
           <Navbar />
         </SidebarProvider>
         <Home />

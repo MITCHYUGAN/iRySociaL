@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { PostCard } from "../Cards/PostCard";
 import { getPosts } from "@/features/CreatePost/grapghqLQuery/queryposts";
 import { useAccount } from "wagmi";
-import DOMPurify from "dompurify";
 
 const PostFeed = () => {
   const { address } = useAccount();
   const [posts, setPosts] = useState([]);
-  const [content, setContent] = useState();
 
   useEffect(() => {
     if (!address) {
@@ -34,15 +32,7 @@ const PostFeed = () => {
       {posts.map((post) => (
         <PostCard content={post.content} />
       ))}
-      {/* 
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard />
-      <PostCard /> */}
+      {/* <PostCard /> */}
     </section>
   );
 };

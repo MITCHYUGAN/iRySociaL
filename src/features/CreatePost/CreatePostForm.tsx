@@ -11,6 +11,7 @@ import { createpost } from "./create-post";
 import { getProfile } from "../Profile/onboarding/grapghqLQuery/queryprofile";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
+import { useNavigate } from "react-router-dom";
 
 // interface CreatePostFormProps {
 //   classname: string;
@@ -44,10 +45,9 @@ const CreatePostForm = () => {
   const [isProfileCreated, setIsProfileCreated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(true);
+  const navigate = useNavigate();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-
 
   useEffect(() => {
     if (!address) {
@@ -108,6 +108,7 @@ const CreatePostForm = () => {
     const dataToUpload = `<p>${content}</p> <div>${imagesHTML}</div>`;
 
     console.log("dataatateup", dataToUpload);
+
     try {
       const postId = await createpost(dataToUpload, author, username);
       console.log("POSTID", postId);
@@ -117,6 +118,12 @@ const CreatePostForm = () => {
       }, 1000);
 
       setLoading(false);
+      setContent("");
+      setMedia([]);
+
+      setTimeout(function () {
+        navigate("/posts");
+      }, 3000);
 
       return;
     } catch (error) {
@@ -186,7 +193,7 @@ const CreatePostForm = () => {
               // onBlur={() => setIsFocused(false)}
             />
             {media.length > 0 && (
-              <div className="grid grid-cols-2 gap-2 mt-4">
+              <div className="grid grid-cols-2 gap-2">
                 {media.map((item, index) => (
                   <div key={index} className="relative group rounded-xl overflow-hidden bg-secondary/30 border border-border">
                     <div className="aspect-video relative">

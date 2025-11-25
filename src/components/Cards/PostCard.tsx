@@ -17,7 +17,7 @@ export function PostCard({ featured = false, content }: PostCardProps) {
 
   return (
     <div
-      className={` bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
+      className={` w-inherit bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
         featured ? "ring-2 ring-accent/30" : ""
       }`}
     >
@@ -55,7 +55,7 @@ export function PostCard({ featured = false, content }: PostCardProps) {
       </div> */}
 
       <div
-        className="post-content flex items-center gap-3 flex-wrap overflow-hidden"
+        className="post-content flex flex-col my-5 gap-3 flex-wrap overflow-hidden"
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(content),
         }}

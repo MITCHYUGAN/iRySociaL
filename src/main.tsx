@@ -31,8 +31,9 @@ const router = createBrowserRouter([
       {
         path: "/posts",
         element: (
-          <div className="flex flex-col md:flex-row w-full">
-            <SidebarProvider className="w-[40%]">
+          <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
+            <SidebarProvider className="w-[50%]">
+            {/* <SidebarProvider className="w-[400px]"> */}
               <Navbar />
             </SidebarProvider>
             <Posts />
@@ -43,8 +44,9 @@ const router = createBrowserRouter([
       {
         path: "/articles",
         element: (
-          <div className="flex flex-col md:flex-row w-full">
-            <SidebarProvider className="w-[40%]">
+          <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
+            <SidebarProvider className="w-[50%]">
+            {/* <SidebarProvider className="w-[400px]"> */}
               <Navbar />
             </SidebarProvider>
             <Articles />
@@ -55,8 +57,9 @@ const router = createBrowserRouter([
       {
         path: "/videos",
         element: (
-          <div className="flex flex-col md:flex-row w-full">
-            <SidebarProvider className="w-[40%]">
+          <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
+            <SidebarProvider className="w-[50%]">
+            {/* <SidebarProvider className="w-[400px]"> */}
               <Navbar />
             </SidebarProvider>
             <Videos />
@@ -68,8 +71,8 @@ const router = createBrowserRouter([
       {
         path: "/profile/:username",
         element: (
-          <div className="flex flex-col md:flex-row w-full">
-            <SidebarProvider className=" w-[40%] lg:w-[26%]">
+          <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
+            <SidebarProvider className=" w-[400px] lg:w-[400px]">
               <Navbar />
             </SidebarProvider>
             <Profile />

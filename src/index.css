@@ -5,7 +5,22 @@
 @tailwind utilities;
 
 .post-content img {
-  width: 300px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(38, 38, 38, 0.69);
+  height: 200px;
+}
+
+.post-content p{
+  font-size: 20px;
+}
+
+.post-content div{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  /* height: 200px; */
 }
 
 .post-content:nth-child(3) {
