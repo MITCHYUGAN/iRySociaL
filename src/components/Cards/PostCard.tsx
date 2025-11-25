@@ -17,7 +17,7 @@ export function PostCard({ featured = false, content }: PostCardProps) {
 
   return (
     <div
-      className={`md:max-w-[700px] lg:max-w-[1000px] bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
+      className={` bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${
         featured ? "ring-2 ring-accent/30" : ""
       }`}
     >

@@ -7,7 +7,7 @@ const tabSTyle = "rounded-[0.4rem] p-1.5 cursor-pointer focus:bg-black active:bg
 
 const HomeFeeds = () => {
   return (
-    <div className="mt-10">
+    <div className="mt-10 w-full">
       <Tabs defaultValue="for-you" className="space-y-8">
         <TabsList className="grid w-full p-1 rounded-[0.4rem] grid-cols-3 bg-[#222222]">
           <TabsTrigger value="for-you" className="rounded-[0.4rem] p-1.5 cursor-pointer hover:bg-black focus:bg-black active:bg-black">

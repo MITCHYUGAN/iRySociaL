@@ -7,8 +7,8 @@ import { SidebarProvider } from "./components/ui/sidebar";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex flex-col md:flex-row w-full">
-        <SidebarProvider className="w-[40%]">
+      <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
+        <SidebarProvider className="w-[400px]">
           <Navbar />
         </SidebarProvider>
         <Home />

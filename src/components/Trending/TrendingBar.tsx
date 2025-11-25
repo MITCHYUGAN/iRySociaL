@@ -37,9 +37,8 @@ const browseitems = [
 
 const TrendingBar = () => {
   return (
-    <SidebarProvider className="hidden xl:flex w-[20%]">
-    {/* <SidebarProvider className="hidden xl:flex w-[1000px]"> */}
-      <Sidebar side="right">
+    <SidebarProvider className="hidden xl:flex w-[300px]">
+      <Sidebar className="w-inherit" side="right">
         <SidebarHeader>
           <div className="relative">
             <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />

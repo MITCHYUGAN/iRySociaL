@@ -13,7 +13,7 @@ const Navbar = ({ children }: { children?: React.ReactNode }) => {
   return (
     <>
       <AppSidebar />
-      <main className="flex ml-7 mt-10 items-center">
+      <main className="flex max-md:ml-7 max-md:mt-10 items-center">
         <Avatar className="w-[50px] h-[50px]  md:hidden my-6 mr-6 cursor-pointer" onClick={() => toggleSidebar()}>
           <AvatarImage className="w-full" src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback>🥷</AvatarFallback>
