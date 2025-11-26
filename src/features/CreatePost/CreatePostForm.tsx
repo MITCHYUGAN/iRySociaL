@@ -13,10 +13,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
 import { useNavigate } from "react-router-dom";
 
-// interface CreatePostFormProps {
-//   classname: string;
-// }
-
 interface MediaPreview {
   file: File;
   preview: string;
@@ -146,22 +142,34 @@ const CreatePostForm = () => {
 
   const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return;
+    if (!files || files.length === 0) return;
 
-    const processed = await Promise.all(
-      Array.from(files).map(async (file) => {
-        const base64 = await fileToBase64(file); // 🔥 convert here
+    // First collect only valid images
+    const validFiles = Array.from(files).filter((file) => file.type.startsWith("image/"));
+
+    if (validFiles.length === 0) {
+      alert("Only images are supported!");
+      e.target.value = "";
+      return;
+    }
+
+    // Now we know every file is an image → no nulls, no type issues
+    const processed: MediaPreview[] = await Promise.all(
+      validFiles.map(async (file) => {
+        const base64 = await fileToBase64(file);
         return {
           file,
           preview: URL.createObjectURL(file),
-          base64, // 🔥 store base64
-          type: file.type.startsWith("video/") ? "video" : "image",
+          base64,
+          type: "image" as const,
         };
       })
     );
 
+    // Safe to spread – processed is guaranteed MediaPreview[]
     setMedia((prev) => [...prev, ...processed]);
 
+    // Reset the input
     e.target.value = "";
   };
 
