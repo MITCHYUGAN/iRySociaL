@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, 
+  // CardContent 
+} from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { Textarea } from "@/components/ui/textarea";
+// import { Textarea } from "@/components/ui/textarea";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { ArrowLeft, ImageIcon, Smile, Wallet } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, 
+  // ImageIcon, Smile, 
+  Wallet } from "lucide-react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import CreatePostForm from "./CreatePostForm";
@@ -12,24 +16,24 @@ import CreatePostForm from "./CreatePostForm";
 const CreatePostPage = () => {
   const { address } = useAccount();
   const navigate = useNavigate();
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
+  // const [content, setContent] = useState("");
+  // const [image, setImage] = useState("");
 
-  const postContent = () => {
-    if (!address) {
-      console.log("Pls connect your wallet");
-      return;
-    }
+  // const postContent = () => {
+  //   if (!address) {
+  //     console.log("Pls connect your wallet");
+  //     return;
+  //   }
 
-    if (!content) {
-      // setLoading(false);
-      alert("Content field can't be empty");
-      return;
-    }
+  //   if (!content) {
+  //     // setLoading(false);
+  //     alert("Content field can't be empty");
+  //     return;
+  //   }
 
-    console.log("Content", content);
-    console.log("Image", image);
-  };
+  //   console.log("Content", content);
+  //   console.log("Image", image);
+  // };
 
   return (
     <div className="w-full h-screen flex flex-col items-center max-md:mt-[100px] mt-[40px]">

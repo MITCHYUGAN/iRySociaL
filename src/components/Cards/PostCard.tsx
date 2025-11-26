@@ -65,7 +65,7 @@ export function PostCard({ featured = false, content, username, likes, comments 
       </div> */}
 
       <div
-        className="post-content flex flex-col my-5 gap-3 flex-wrap overflow-hidden"
+        className="post-content flex flex-col my-5 gap-3 flex-wrap overflow-hidden whitespace-pre-wrap break-words leading-relaxed"
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(content),
         }}
