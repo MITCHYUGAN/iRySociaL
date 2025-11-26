@@ -107,7 +107,7 @@ export function AppSidebar() {
     };
 
     fetchUserName();
-  }, [address]);
+  }, );
 
   return (
     <Sidebar className="w-inherit">

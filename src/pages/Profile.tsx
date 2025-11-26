@@ -11,10 +11,22 @@ import {
   // MapPin,
   // LinkIcon,
   Calendar,
+  MessageSquare,
   SquarePen,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getPosts } from "@/features/CreatePost/grapghqLQuery/queryposts";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { PostCard } from "@/components/Cards/PostCard";
 // import { Spinner } from "@/components/ui/spinner";
+
+interface Post {
+  id: string;
+  content: string;
+  username: string;
+  likes: number;
+  comments: number;
+}
 
 const Profile = () => {
   const { address } = useAccount();
@@ -25,6 +37,8 @@ const Profile = () => {
   const [profileJoined, setProfileJoined] = useState(Date);
   const { username } = useParams<{ username: string }>();
   const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!address) {
@@ -57,7 +71,38 @@ const Profile = () => {
       setLoading(false);
     };
 
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        const fetchedPosts = await getPosts();
+        const formattedPosts: Post[] = await Promise.all(
+          fetchedPosts.map(async (post: any) => {
+            const author = post.tags.find((t: any) => t.name === "author")?.value || "Anonymous";
+            const profile = post.tags.find((t: any) => t.name === "username")?.value || "Anonymous";
+            // const plainText = post.content;
+            return {
+              id: post.id,
+              content: post.content,
+              author: author.slice(0, 6) + "..." + author.slice(-4),
+              // createdAt: post.timestamp,
+              likes: 0,
+              comments: 0,
+              // readTime: `${Math.ceil(
+              //   plainText.split(" ").length / 200
+              // )} min read`,
+              username: profile,
+            };
+          })
+        );
+        setLoading(false);
+        setPosts(formattedPosts);
+      } catch (error) {
+        console.log("Error while fetching post", error);
+      }
+    };
+
     fetchProfileByUsername();
+    fetchPost();
   }, [address, username]);
 
   return (
@@ -66,15 +111,24 @@ const Profile = () => {
         <div className="grid place-items-center w-full h-screen">
           <div className="flex flex-col items-center gap-[10px]">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-main border-t-transparent mb-4"></div>
-            <h1>Loading profile...</h1>
+            <h1>Fetching profile...</h1>
           </div>
         </div>
       ) : !profile ? (
-        <h1>Profile not found</h1>
+        <div className="grid place-items-center w-full h-screen">
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <MessageSquare />
+              </EmptyMedia>
+              <EmptyTitle>No Profile Found</EmptyTitle>
+              <EmptyDescription>We couldn't find your profile. <br /> If you're sure this exists, pls try again.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        </div>
       ) : (
         <div className="w-full pt-5 lg:py-10 px-5 flex-1 max-w-[1200px] ">
           <div className="h-48 bg-linear-to-r from-accent/20 to-primary/20 rounded-lg mx-4 mt-4"></div>
-
           <div className="px-4 pb-6">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-24 mb-6 relative z-10">
               <Avatar className="h-32 w-32 border-4 border-card">
@@ -181,11 +235,33 @@ const Profile = () => {
               </TabsList>
 
               <TabsContent value="posts" className="mt-6 space-y-0">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="border-b border-border last:border-b-0">
-                    {/* <PostCard /> */}
+                {loading ? (
+                  <div className="grid place-items-center w-full h-screen">
+                    <div className="flex flex-col items-center gap-[10px]">
+                      <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-main border-t-transparent mb-4"></div>
+                      <h1>Fetching Posts...</h1>
+                    </div>
                   </div>
-                ))}
+                ) : posts.length === 0 ? (
+                  <Empty>
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <MessageSquare />
+                      </EmptyMedia>
+                      <EmptyTitle>No Post Found</EmptyTitle>
+                      <EmptyDescription>We couldn't find any post yet. Get started by creating your first post.</EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                      <div className="flex gap-2">
+                        <Button className="cursor-pointer" onClick={() => navigate("/create/post")}>
+                          Create Post
+                        </Button>
+                      </div>
+                    </EmptyContent>
+                  </Empty>
+                ) : (
+                  posts.map((post) => <PostCard key={post.id} content={post.content} username={post.username} likes={post.likes} comments={post.comments} />)
+                )}
               </TabsContent>
 
               <TabsContent value="articles" className="mt-6 space-y-4">

@@ -22,6 +22,7 @@ export const getPosts = async () => {
           { name: "type", values: ["${import.meta.env.VITE_TYPE_POST}"] }
           { name: "Content-Type", values: "text/html" },
         ],
+        limit: 10
         order: DESC,
       ) {
         edges {
