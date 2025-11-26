@@ -19,6 +19,7 @@ import TrendingBar from "./components/Trending/TrendingBar.tsx";
 import ProfileCheck from "./features/Profile/onboarding/ProfileCheck.tsx";
 import Profile from "./pages/Profile.tsx";
 import CreatePostPage from "./features/CreatePost/CreatePostPage.tsx";
+import CreateArticlePage from "./features/CreateArticle/CreateArticlePage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
         element: (
           <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
             <SidebarProvider className="w-[50%]">
-            {/* <SidebarProvider className="w-[400px]"> */}
+              {/* <SidebarProvider className="w-[400px]"> */}
               <Navbar />
             </SidebarProvider>
             <Posts />
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
         element: (
           <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
             <SidebarProvider className="w-[50%]">
-            {/* <SidebarProvider className="w-[400px]"> */}
+              {/* <SidebarProvider className="w-[400px]"> */}
               <Navbar />
             </SidebarProvider>
             <Articles />
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
         element: (
           <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
             <SidebarProvider className="w-[50%]">
-            {/* <SidebarProvider className="w-[400px]"> */}
+              {/* <SidebarProvider className="w-[400px]"> */}
               <Navbar />
             </SidebarProvider>
             <Videos />
@@ -84,6 +85,11 @@ const router = createBrowserRouter([
       {
         path: "/create/post",
         element: <CreatePostPage />,
+      },
+
+      {
+        path: "/create/article",
+        element: <CreateArticlePage />,
       },
     ],
   },
