@@ -20,6 +20,7 @@ import ProfileCheck from "./features/Profile/onboarding/ProfileCheck.tsx";
 import Profile from "./pages/Profile.tsx";
 import CreatePostPage from "./features/CreatePost/CreatePostPage.tsx";
 import CreateArticlePage from "./features/CreateArticle/CreateArticlePage.tsx";
+import CreateVideoPage from "./features/CreateVideo/CreateVideoPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: "/create/article",
         element: <CreateArticlePage />,
+      },
+      {
+        path: "/create/video",
+        element: <CreateVideoPage />,
       },
     ],
   },

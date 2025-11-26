@@ -1,5 +1,5 @@
 import { ArticleCard } from "@/components/Cards/ArticleCard";
-import { PostCard } from "@/components/Cards/PostCard";
+// import { PostCard } from "@/components/Cards/PostCard";
 import { VideoCard } from "@/components/Cards/VideoCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -183,7 +183,7 @@ const Profile = () => {
               <TabsContent value="posts" className="mt-6 space-y-0">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="border-b border-border last:border-b-0">
-                    <PostCard />
+                    {/* <PostCard /> */}
                   </div>
                 ))}
               </TabsContent>

@@ -6,6 +6,17 @@ import { getPosts } from "@/features/CreatePost/grapghqLQuery/queryposts";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 
+interface Tag {
+  name: string;
+  value: string;
+}
+
+interface RawPost {
+  id: string;
+  content: string;
+  tags: Tag[];
+}
+
 interface Post {
   id: string;
   content: string;
@@ -24,11 +35,11 @@ const HomeFeeds = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const fetchedPosts = await getPosts();
-        const formattedPosts: Post[] = await Promise.all(
-          fetchedPosts.map(async (post: any) => {
-            const author = post.tags.find((t: any) => t.name === "author")?.value || "Anonymous";
-            const profile = post.tags.find((t: any) => t.name === "username")?.value || "Anonymous";
+        const fetchedPosts: RawPost[] = await getPosts();
+        // const formattedPosts: Post[] = await Promise.all(
+          const formattedPosts: Post[] = fetchedPosts.map((post) => {
+            const author = post.tags.find((t) => t.name === "author")?.value || "Anonymous";
+            const profile = post.tags.find((t) => t.name === "username")?.value || "Anonymous";
             // const plainText = post.content;
             return {
               id: post.id,
@@ -43,7 +54,7 @@ const HomeFeeds = () => {
               username: profile,
             };
           })
-        );
+        // );
 
         setPosts(formattedPosts);
       } catch (error) {
@@ -86,17 +97,17 @@ const HomeFeeds = () => {
         </TabsContent>
 
         <TabsContent value="following" className="space-y-4">
-          <PostCard featured />
+          {/* <PostCard featured /> */}
           <ArticleCard isGated={false} />
-          <PostCard />
+          {/* <PostCard /> */}
           <VideoCard isGated={false} />
         </TabsContent>
 
         <TabsContent value="trending" className="space-y-4">
           <VideoCard isGated={false} />
-          <PostCard featured />
+          {/* <PostCard featured /> */}
           <ArticleCard isGated={false} />
-          <PostCard />
+          {/* <PostCard /> */}
         </TabsContent>
       </Tabs>
     </div>

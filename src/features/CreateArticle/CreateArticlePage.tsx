@@ -1,17 +1,22 @@
+// import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+// import { Input } from "@/components/ui/input";
+// import { Textarea } from "@/components/ui/textarea";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { ArrowLeft, Globe, Lock, Wallet } from "lucide-react";
-import { useState } from "react";
+import {
+  ArrowLeft,
+  // Globe, Lock,
+  Wallet,
+} from "lucide-react";
+// import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 // import { Link } from "react-router-dom";
 
 const CreateArticlePage = () => {
-  const [isGated, setIsGated] = useState(false);
+  // const [isGated, setIsGated] = useState(false);
   const navigate = useNavigate();
   const { address } = useAccount();
 
@@ -42,64 +47,42 @@ const CreateArticlePage = () => {
           </Button>
         </Empty>
       ) : (
-        <div className="flex flex-col gap-[50px] max-md:p-7">
-          <section className="flex flex-col items-start gap-3">
-            <Button
-              variant="link"
-              className="cursor-pointer"
-              onClick={() => {
-                navigate("/");
-                // disconnect();
-              }}
-            >
-              <ArrowLeft />
-              Back
-            </Button>
-            <h1 className="md:text-6xl text-3xl font-bold tracking-tight">Create an Article</h1>
-            <p className="text-1xl md:text-[20px] text-muted-foreground">
-              Store your post permanently on <span className="text-primary">Irys</span>
-            </p>
-          </section>
+        <div className="flex flex-col items-center max-md:p-7">
+          {/* <Button
+            variant="link"
+            className="cursor-pointer"
+            onClick={() => {
+              navigate("/");
+              // disconnect();
+            }}
+          >
+            <ArrowLeft />
+            Back
+          </Button> */}
 
-          <div className="w-[1400px] mx-auto px-4 py-8 flex flex-col">
+          <div className=" mx-auto px-4 py-8 flex flex-col">
+            {/* <SimpleEditor /> */}
 
-            <textarea name="" className="w-full max-h-[100px] text-white p-5  text-5xl border-none outline-none" id="" placeholder="Title"></textarea>
-            <textarea name="" className="w-full min-h-[500px] text-white p-5 text-2xl outline-none" id="" placeholder="Share your thoughts"></textarea>
-            {/* <div className="w-full md:col-span-2 space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Article Title</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Input placeholder="Enter your article title..." className="text-lg font-semibold" />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Article Content</CardTitle>
-                  <CardDescription>Write your article using Markdown format</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    placeholder="# Start writing... Write your article here. You can use markdown formatting like **bold**, *italic*, and more."
-                    rows={12}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Preview</CardTitle>
-                </CardHeader>
-                <CardContent className="prose prose-invert max-w-none">
-                  <div className="p-4 rounded-lg bg-secondary">
-                    <h1 className="text-2xl font-bold mb-4">Your article preview will appear here</h1>
-                    <p className="text-muted-foreground">Start writing to see the preview</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div> */}
+            <Empty>
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  {/* <Wallet /> */}
+                </EmptyMedia>
+                <EmptyTitle>Currently Working on This</EmptyTitle>
+                <EmptyDescription>Article creation would be supported soon</EmptyDescription>
+              </EmptyHeader>
+              <Button
+                variant="link"
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/");
+                  // disconnect();
+                }}
+              >
+                <ArrowLeft />
+                Back
+              </Button>
+            </Empty>
 
             {/* <div className="space-y-4">
               <Card>
