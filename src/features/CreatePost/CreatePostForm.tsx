@@ -37,8 +37,10 @@ const CreatePostForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [media, setMedia] = useState<MediaPreview[]>([]);
   const { address } = useAccount();
-  const [isTXCancel, setTXCancel] = useState(false);
-  const [isProfileCreated, setIsProfileCreated] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isPostCreated, setIsPostCreated] = useState(false);
+  const [postId, setPostId] = useState("")
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const navigate = useNavigate();
@@ -108,14 +110,15 @@ const CreatePostForm = () => {
     try {
       const postId = await createpost(dataToUpload, author, username);
       console.log("POSTID", postId);
-
-      setTimeout(function () {
-        setIsProfileCreated(true);
-      }, 1000);
+      setPostId(`https://gateway.irys.xyz/${postId}`)
 
       setLoading(false);
       setContent("");
       setMedia([]);
+
+      setTimeout(function () {
+        setIsPostCreated(true);
+      }, 1000);
 
       setTimeout(function () {
         navigate("/posts");
@@ -125,11 +128,13 @@ const CreatePostForm = () => {
     } catch (error) {
       console.error("Error while creating post", error);
 
-      if (error instanceof Error && error.message.includes("user rejected action")) {
-        setTimeout(function () {
-          setTXCancel(true);
-        }, 1000);
-      }
+      // if (error instanceof Error && error.message.includes("user rejected action")) {
+      // }
+
+      setTimeout(function () {
+        setIsError(true);
+        setErrorMessage(error.message);
+      }, 1000);
 
       setLoading(false);
       return;
@@ -268,29 +273,28 @@ const CreatePostForm = () => {
         </div>
       </div>
 
-      {isTXCancel && (
+      {isError && (
         <Alert variant={"destructive"} className="w-[60%] z-100 md:w-[400px] absolute bottom-20 right-6">
           <AlertCircleIcon />
-          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setTXCancel(false)}>
+          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsError(false)}>
             <XIcon className="size-5" />
             <span className="sr-only">Close</span>
           </button>
-          <AlertTitle className="max-md:text-[15px]">TX Cancelled</AlertTitle>
-          <AlertDescription className="max-md:text-[12px] text-gray-400">User cancelled the transaction</AlertDescription>
+          <AlertDescription>{errorMessage.slice(0, 100)}</AlertDescription>
         </Alert>
       )}
 
-      {isProfileCreated && (
+      {isPostCreated && (
         <Alert variant={"default"} className="w-[60%] z-100 md:w-[400px] absolute bottom-20 right-6 border-primary">
           <CheckCircle2Icon className="text-primary" />
-          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsProfileCreated(false)}>
+          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsPostCreated(false)}>
             <XIcon className="size-5" />
             <span className="sr-only">Close</span>
           </button>
           <AlertTitle className="max-md:text-[15px] text-primary">Successful</AlertTitle>
           <AlertDescription className="max-md:text-[12px]">
             Your post has been uploaded successfully
-            <a className="text-primary underline" target="blank_" href="https://gateway.irys.xyz/AZzqVLk4WgymrDYrrkxq4t8cym8qCbPkivay2UKsnPKC">
+            <a className="text-primary underline" target="blank_" href={`${postId}`}>
               View here
             </a>
           </AlertDescription>

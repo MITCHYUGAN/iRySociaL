@@ -23,6 +23,7 @@ import CreateArticlePage from "./features/CreateArticle/CreateArticlePage.tsx";
 import CreateVideoPage from "./features/CreateVideo/CreateVideoPage.tsx";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "./components/ui/button.tsx";
+import { UserProvider } from "./context/UserContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -129,7 +130,9 @@ createRoot(document.getElementById("root")!).render(
               borderRadius: "small",
             })}
           >
-            <RouterProvider router={router} />
+            <UserProvider>
+              <RouterProvider router={router} />
+            </UserProvider>
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>

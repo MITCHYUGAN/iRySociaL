@@ -20,11 +20,11 @@ import { useTheme } from "@/features/Dark_LightMode/theme-provider";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { useEffect, useState } from "react";
-import { getProfile } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
-import logoDark from "@/assets/irysocial_logo_dark.png"
-import logoLight from "@/assets/irysocial_logo.png"
+import logoDark from "@/assets/irysocial_logo_dark.png";
+import logoLight from "@/assets/irysocial_logo.png";
 import CreateModal from "../modal/CreateModal";
+import { useUser } from "@/context/UserContext";
+import { useState } from "react";
 
 const browseitems = [
   {
@@ -50,64 +50,49 @@ const browseitems = [
 ];
 
 export function AppSidebar() {
+  const {
+    profile,
+    // isLoading
+  } = useUser();
   const { theme } = useTheme();
   const { toggleSidebar } = useSidebar();
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
   const margin = address ? "0px" : "100px";
-  const [username, setUsername] = useState("");
-  const [openCreateModal, setOpenCreateModal] = useState(false)
+  // const [username, setUsername] = useState("");
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+
+  const username = profile?.username || "";
+
+  console.log("Profile", profile);
 
   const moreitems = [
-  {
-    title: "Profile",
-    url: `/profile/${username}`,
-    icon: User2,
-  },
-  {
-    title: "Bookmarks",
-    url: "#",
-    icon: Bookmark,
-  },
-  {
-    title: "Notifications",
-    url: "#",
-    icon: Bell,
-  },
-  {
-    title: "Messages",
-    url: "#",
-    icon: Mail,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
-
-  useEffect(() => {
-    if (!address) {
-      return;
-    }
-
-    const fetchUserName = async () => {
-      try {
-        const profile = await getProfile(address);
-        console.log("Profile", profile);
-
-        if (profile) {
-          setUsername(profile.username);
-        } else {
-          setUsername("undefined");
-        }
-      } catch (error) {
-        console.error("Error while fetching profile", error)
-      }
-    };
-
-    fetchUserName();
-  }, );
+    {
+      title: "Profile",
+      url: `/profile/${username}`,
+      icon: User2,
+    },
+    {
+      title: "Bookmarks",
+      url: "#",
+      icon: Bookmark,
+    },
+    {
+      title: "Notifications",
+      url: "#",
+      icon: Bell,
+    },
+    {
+      title: "Messages",
+      url: "#",
+      icon: Mail,
+    },
+    {
+      title: "Settings",
+      url: "#",
+      icon: Settings,
+    },
+  ];
 
   return (
     <Sidebar className="w-inherit">
@@ -115,9 +100,7 @@ export function AppSidebar() {
         <X className="md:hidden absolute right-5" onClick={() => toggleSidebar()} />
         <div className="flex flex-col items-start mt-5 gap-5">
           <a href="/home">
-            <div className="sidebar_logo">
-              {theme === "light" ? <img className="w-50 " src={logoDark} alt="" /> : <img className="w-50" src={logoLight} alt="" />}
-            </div>
+            <div className="sidebar_logo">{theme === "light" ? <img className="w-50 " src={logoDark} alt="" /> : <img className="w-50" src={logoLight} alt="" />}</div>
           </a>
           <InputGroup>
             <InputGroupInput placeholder="Search..." />
@@ -179,15 +162,13 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="flex flex-col items-center justify-center">
         <div className={`flex items-center gap-3 mb-[${margin}] `}>
-          {!address ? (
-            <ConnectButton />
-          ) : (
+          {address ? (
             <SidebarMenu>
               <SidebarMenuItem>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <SidebarMenuButton>
-                      <User2 /> {username}
+                      <User2 /> {username || "loading..."}
                       <ChevronUp className="ml-auto" />
                     </SidebarMenuButton>
                   </DropdownMenuTrigger>
@@ -201,6 +182,8 @@ export function AppSidebar() {
                 </DropdownMenu>
               </SidebarMenuItem>
             </SidebarMenu>
+          ) : (
+            <ConnectButton />
           )}
           {/* <ModeToggle /> */}
         </div>

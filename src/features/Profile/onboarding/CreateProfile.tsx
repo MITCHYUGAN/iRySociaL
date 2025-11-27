@@ -21,9 +21,10 @@ const CreateProfile = () => {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isTXCancel, setTXCancel] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isProfileCreated, setIsProfileCreated] = useState(false);
-  const [usernameError, setUsernameError] = useState("");
+  const [usernameError, setUsernameError] = useState();
 
   useEffect(() => {
     if (!address) {
@@ -74,7 +75,7 @@ const CreateProfile = () => {
     }
 
     const exists = await checkUsername(username);
-    
+
     if (exists) {
       setLoading(false);
       return;
@@ -83,14 +84,26 @@ const CreateProfile = () => {
     try {
       await createprofile(username, bio, address);
       setLoading(false);
-      setIsProfileCreated(true);
-      navigate("/");
+
+      setTimeout(function () {
+        setIsProfileCreated(true);
+      }, 1000);
+
+      const getUserProfile = await getProfile(address)
+
+      console.log("getUserProfile", getUserProfile)
+
+      setTimeout(() => {
+        navigate(`/profile/${getUserProfile.username}`);
+      }, 3000);
+
     } catch (error: unknown) {
       console.log("Error while creating profile", error);
 
-      if (error instanceof Error && error.message.includes("user rejected action")) {
-        setTXCancel(true);
-      }
+      setTimeout(function () {
+        setIsError(true);
+        setErrorMessage(error.message);
+      }, 1000);
 
       setLoading(false);
       return;
@@ -200,22 +213,23 @@ const CreateProfile = () => {
             </form>
           </Card>
 
-          {isTXCancel && (
-            <Alert variant={"destructive"} className="w-[60%] md:w-[400px] absolute bottom-20 right-6">
+          {isError && (
+            <Alert variant={"destructive"} className="w-[60%] overflow-scroll md:w-[400px] absolute bottom-20 right-6">
               <AlertCircleIcon />
-              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setTXCancel(false)}>
+              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsError(false)}>
                 <XIcon className="size-5" />
                 <span className="sr-only">Close</span>
               </button>
-              <AlertTitle className="max-md:text-[15px]">TX Cancelled</AlertTitle>
-              <AlertDescription className="max-md:text-[12px] text-gray-400">User cancelled the transaction</AlertDescription>
+              {/* <AlertTitle className="max-md:text-[15px]">TX Cancelled</AlertTitle>
+              <AlertDescription className="max-md:text-[12px] text-gray-400">User cancelled the transaction</AlertDescription> */}
+              <AlertDescription>{errorMessage.slice(0, 50)}</AlertDescription>
             </Alert>
           )}
 
           {isProfileCreated && (
             <Alert variant={"default"} className="w-[60%] md:w-[400px] absolute bottom-20 right-6 border-primary">
               <CheckCircle2Icon className="text-primary" />
-              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setTXCancel(false)}>
+              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsProfileCreated(false)}>
                 <XIcon className="size-5" />
                 <span className="sr-only">Close</span>
               </button>
