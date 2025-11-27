@@ -56,7 +56,7 @@ const PostFeed = () => {
   }, [address]);
 
   return (
-    <section className="flex flex-col gap-7 mt-10">
+    <section className="flex w-full flex-col gap-7 mt-10">
       {loading ? (
         <div className="grid place-items-center w-full h-screen">
           <div className="flex flex-col items-center gap-[10px]">

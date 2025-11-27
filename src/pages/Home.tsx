@@ -4,9 +4,9 @@ import CreatePostForm from "@/features/CreatePost/CreatePostForm";
 const Home = () => {
 
   return (
-    <div className="pt-5 w-full lg:py-10 px-5">
-    {/* <div className=" pt-5 px-5 md:px-10 lg:px-20 lg:py-10 w-full"> */}
+    <div className="w-full flex flex-col items-center ">
       <CreatePostForm />
+      <hr className="border mt-10 w-full" />
       <HomeFeeds />
     </div>
   );

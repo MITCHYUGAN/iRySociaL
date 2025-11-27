@@ -66,9 +66,9 @@ const HomeFeeds = () => {
   }, [address]);
 
   return (
-    <div className="mt-10 w-full">
-      <Tabs defaultValue="for-you" className="space-y-8">
-        <TabsList className="grid w-full p-1 rounded-[0.4rem] grid-cols-3 bg-[#222222]">
+    <div className="mt-10 w-full flex flex-col items-center">
+      <Tabs defaultValue="for-you" className="space-y-8 w-full flex flex-col items-center">
+        <TabsList className="grid w-full width rounded-[0.4rem] grid-cols-3 bg-[#222222] max-xl:ml-10 ">
           <TabsTrigger value="for-you" className="rounded-[0.4rem] p-1.5 cursor-pointer hover:bg-black focus:bg-black active:bg-black">
             For You
           </TabsTrigger>
@@ -80,7 +80,7 @@ const HomeFeeds = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="for-you" className="space-y-4">
+        <TabsContent value="for-you" className="space-y-4 w-full">
           {posts.slice(0, 2).map((post) => (
             <PostCard key={post.id} content={post.content} username={post.username} likes={post.likes} comments={post.comments} />
           ))}

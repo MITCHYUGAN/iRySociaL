@@ -11,7 +11,7 @@ const Navbar = ({ children }: { children?: React.ReactNode }) => {
   const { theme } = useTheme();
 
   return (
-    <>
+    <div>
       <AppSidebar />
       <main className="flex max-md:ml-7 max-md:mt-10 items-center">
         <Avatar className="w-[50px] h-[50px]  md:hidden my-6 mr-6 cursor-pointer" onClick={() => toggleSidebar()}>
@@ -23,7 +23,7 @@ const Navbar = ({ children }: { children?: React.ReactNode }) => {
         </div>
         {children}
       </main>
-    </>
+    </div>
   );
 };
 

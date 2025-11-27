@@ -188,7 +188,7 @@ const CreatePostForm = () => {
   };
 
   return (
-    <section className="w-full flex flex-col gap-10" aria-label="mainfeed whats on your mind">
+    <section className="w-full width max-xl:px-10 flex flex-col gap-10" aria-label="mainfeed whats on your mind">
       <div className="flex gap-5">
         <Avatar className="w-[50px] h-[50px] hidden md:block self-start">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />

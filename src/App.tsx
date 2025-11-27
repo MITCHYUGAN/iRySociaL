@@ -1,21 +1,16 @@
 import Navbar from "./components/Navbar/Navbar";
-import { ThemeProvider } from "./features/Dark_LightMode/theme-provider";
-import Home from "./pages/Home";
 import TrendingBar from "./components/Trending/TrendingBar";
-import { SidebarProvider } from "./components/ui/sidebar";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="flex flex-col justify-evenly md:gap-10 md:flex-row w-full">
-        <SidebarProvider className="w-[50%]">
-        {/* <SidebarProvider className="w-[400px]"> */}
-          <Navbar />
-        </SidebarProvider>
-        <Home />
-        <TrendingBar />
-      </div>
-    </ThemeProvider>
+    <div className="flex flex-col justify-between md:flex-row ">
+      <Navbar />
+      <main className="w-full flex flex-col items-center  py-10">
+        <Outlet /> {/* ← All pages go here */}
+      </main>
+      <TrendingBar />
+    </div>
   );
 }
 

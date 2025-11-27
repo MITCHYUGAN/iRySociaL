@@ -224,8 +224,20 @@
   border-color: rgba(38, 38, 38, 0.69);
 }
 
+[data-rk] {
+  width: 100%;
+}
+
 .border {
-  border: 1px solid rgba(38, 38, 38, 0.69);
+  border: 0.5px solid rgba(35, 35, 35, 0.69);
+}
+
+.width{
+  max-width: 800px;
+}
+
+.iconsize{
+  font-size: 10px;
 }
 
 /* SIdebar Mobile Height */

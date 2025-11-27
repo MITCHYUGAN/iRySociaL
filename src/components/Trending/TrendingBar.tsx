@@ -1,89 +1,76 @@
-import { Search, TrendingUp } from "lucide-react";
-import { Input } from "../ui/input";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from "../ui/sidebar";
-
+import { TrendingUp } from "lucide-react";
 const browseitems = [
-  {
-    title: "#WebDevelopment",
-    url: "#",
-    icon: TrendingUp,
-  },
-  {
-    title: "#WebDesign",
-    url: "#",
-    icon: TrendingUp,
-  },
   {
     title: "#Irys",
     url: "#",
     icon: TrendingUp,
+    postCount: "10m+",
   },
+
   {
     title: "#IrysNft",
     url: "#",
     icon: TrendingUp,
+    postCount: "276k",
   },
   {
     title: "#IrysSocials",
     url: "#",
     icon: TrendingUp,
+    postCount: "245k",
+  },
+  {
+    title: "#IrysFeed",
+    url: "#",
+    icon: TrendingUp,
+    postCount: "245k",
+  },
+  {
+    title: "#IrysRealms",
+    url: "#",
+    icon: TrendingUp,
+    postCount: "245k",
+  },
+  {
+    title: "#WebDevelopment",
+    url: "#",
+    icon: TrendingUp,
+    postCount: "98k",
+  },
+  {
+    title: "#WebDesign",
+    url: "#",
+    icon: TrendingUp,
+    postCount: "67k",
   },
   {
     title: "#IrysBlogerr",
     url: "#",
     icon: TrendingUp,
+    postCount: "45k",
   },
 ];
 
 const TrendingBar = () => {
   return (
-    <SidebarProvider className="hidden xl:flex w-[50%]">
-    {/* <SidebarProvider className="hidden xl:flex w-[30%]"> */}
-      <Sidebar className="w-inherit" side="right">
-        <SidebarHeader>
-          <div className="relative">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Search everything..." className="pl-9 bg-secondary border-border" />
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Trending Now</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {browseitems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon className="text-primary" />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          {/* <SidebarGroup>
-            <SidebarGroupLabel>More</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {browseitems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup> */}
-        </SidebarContent>
-      </Sidebar>
-    </SidebarProvider>
+    <div className="w-[400px] xl:flex hidden flex-col border">
+      <section className="flex fixed top-10 right-10 flex-col gap-5">
+        <h4 className="font-extrabold text-[17px]">Trending now</h4>
+        <div className="flex flex-col gap-5">
+          {browseitems.map((item) => (
+            <div key={item.title}>
+              <a href={item.url} className="flex gap-5 items-center">
+                <item.icon className="text-primary" size={15} />
+                <div className="flex flex-col">
+                  <span className="text-gray-300 text-[15px] font-bold">{item.title}</span>
+                  <span className="text-[12px] text-gray-500">{item.postCount}</span>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };
 
