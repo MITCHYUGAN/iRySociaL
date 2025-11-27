@@ -24,7 +24,7 @@ const CreateProfile = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isProfileCreated, setIsProfileCreated] = useState(false);
-  const [usernameError, setUsernameError] = useState();
+  const [usernameError, setUsernameError] = useState<string>();
 
   useEffect(() => {
     if (!address) {
@@ -100,9 +100,11 @@ const CreateProfile = () => {
     } catch (error: unknown) {
       console.log("Error while creating profile", error);
 
+      const message = error instanceof Error ? error.message : "An unexpected error occurred"
+
       setTimeout(function () {
         setIsError(true);
-        setErrorMessage(error.message);
+        setErrorMessage(message);
       }, 1000);
 
       setLoading(false);

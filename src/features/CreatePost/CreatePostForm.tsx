@@ -38,9 +38,9 @@ const CreatePostForm = () => {
   const [media, setMedia] = useState<MediaPreview[]>([]);
   const { address } = useAccount();
   const [isError, setIsError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isPostCreated, setIsPostCreated] = useState(false);
-  const [postId, setPostId] = useState("")
+  const [postId, setPostId] = useState("");
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const navigate = useNavigate();
@@ -110,7 +110,7 @@ const CreatePostForm = () => {
     try {
       const postId = await createpost(dataToUpload, author, username);
       console.log("POSTID", postId);
-      setPostId(`https://gateway.irys.xyz/${postId}`)
+      setPostId(`https://gateway.irys.xyz/${postId}`);
 
       setLoading(false);
       setContent("");
@@ -125,15 +125,14 @@ const CreatePostForm = () => {
       }, 3000);
 
       return;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error while creating post", error);
 
-      // if (error instanceof Error && error.message.includes("user rejected action")) {
-      // }
-
+      const message = error instanceof Error ? error.message : "An unexpected error occurred";
+      
       setTimeout(function () {
         setIsError(true);
-        setErrorMessage(error.message);
+        setErrorMessage(message);
       }, 1000);
 
       setLoading(false);
