@@ -95,7 +95,7 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar className="w-inherit">
+    <Sidebar className="w-[300px]">
       <SidebarHeader>
         <X className="md:hidden absolute right-5" onClick={() => toggleSidebar()} />
         <div className="flex flex-col items-start mt-5 gap-5">

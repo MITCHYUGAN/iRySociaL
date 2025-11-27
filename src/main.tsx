@@ -23,7 +23,6 @@ import { SidebarProvider } from "./components/ui/sidebar.tsx";
 import App from "./App.tsx";
 
 const queryClient = new QueryClient();
-
 const router = createBrowserRouter([
   {
     element: <ProfileCheck />,

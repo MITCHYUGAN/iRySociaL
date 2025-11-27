@@ -1,5 +1,5 @@
-@import './styles/_variables.scss';
-@import './styles/_keyframe-animations.scss';
+@import "./styles/_variables.scss";
+@import "./styles/_keyframe-animations.scss";
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -16,11 +16,11 @@
   height: 200px;
 }
 
-.post-content p{
+.post-content p {
   font-size: 20px;
 }
 
-.post-content div{
+.post-content div {
   /* display: grid; */
   /* grid-template-columns: 1fr 1fr; */
   display: flex;
@@ -224,19 +224,39 @@
   border-color: rgba(38, 38, 38, 0.69);
 }
 
+.postwidth{
+  width: 100% !important;
+}
+
 [data-rk] {
   width: 100%;
+}
+
+[data-rk] ._9pm4ki3 {
+  width: 130%;
+}
+
+@media screen and (max-width: 980px) {
+  [data-rk] ._9pm4ki3 {
+    width: 150%;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  [data-rk] ._9pm4ki3 {
+    width: 200%;
+  }
 }
 
 .border {
   border: 0.5px solid rgba(35, 35, 35, 0.69);
 }
 
-.width{
+.width {
   max-width: 800px;
 }
 
-.iconsize{
+.iconsize {
   font-size: 10px;
 }
 
