@@ -1,5 +1,5 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { mainnet, polygon, optimism, arbitrum, base, type Chain } from "wagmi/chains";
+import { sepolia, polygon, optimism, arbitrum, base, type Chain } from "wagmi/chains";
 
 const irys: Chain = {
   id: 1270,
@@ -22,5 +22,5 @@ const irys: Chain = {
 export const config = getDefaultConfig({
   appName: "iRySocial",
   projectId: "YOUR_PROJECT_ID",
-  chains: [mainnet, polygon, optimism, arbitrum, base, irys],
+  chains: [sepolia, polygon, optimism, arbitrum, base, irys],
 });

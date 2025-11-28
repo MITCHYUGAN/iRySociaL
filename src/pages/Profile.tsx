@@ -7,17 +7,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getProfileByUsername } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   // MapPin,
   // LinkIcon,
   Calendar,
+  Loader2,
   MessageSquare,
+  RotateCw,
   SquarePen,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPosts } from "@/features/CreatePost/grapghqLQuery/queryposts";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { PostCard } from "@/components/Cards/PostCard";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { getIrysUploader } from "@/lib/irys";
+import { ethers, type AddressLike } from "ethers";
+import { Input } from "@/components/ui/input";
 // import { Spinner } from "@/components/ui/spinner";
 
 interface Post {
@@ -39,6 +46,104 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
+
+  const [uploadBalance, setUploadBalance] = useState("Not found");
+  const [walletBalance, setWalletBalance] = useState("Not Found");
+  const [walletName, setWalletName] = useState("Not found");
+  const [amountToFund, setAmountToFUnd] = useState("0.001");
+
+  // Fetch user balance
+  const fetchUploadBalance = async () => {
+    const irys = await getIrysUploader();
+
+    setLoading(true);
+
+    try {
+      // console.log("Getting upload balance...");
+      const balanceAtomic = await irys.getBalance();
+      const balance = irys.utils.fromAtomic(balanceAtomic).toString();
+      // console.log("Balance", balance);
+      setUploadBalance(balance);
+    } catch (error) {
+      console.log("Error getting Upload Balance", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchWalletInfo = async () => {
+    // console.log("Fetching wallet Balance...");
+
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+
+      // Fetch balance
+      const walletBalance = await provider.getBalance(address as AddressLike);
+      const walletBalanceEth = ethers.formatEther(walletBalance);
+
+      // Fetch name
+      const walletName = (await provider.getNetwork()).name;
+
+      setWalletBalance(walletBalanceEth);
+      setWalletName(walletName);
+
+      return walletBalanceEth;
+    } catch (error) {
+      console.log("Error while fetching Wallet balance", error);
+      return "Not found";
+    }
+  };
+
+  // Fund account
+  const fundAccount = async (amount: string) => {
+    console.log("Funding...", amount);
+    setLoading(true);
+
+    if (!amount || Number(amount) <= 0) {
+      alert("Pls enter a valid amount");
+      return;
+    }
+
+    try {
+      // Compare wallet balance with amount to fund
+      const walletBalance = await fetchWalletInfo();
+
+      if (Number(walletBalance) < Number(amount)) {
+        alert("Not enough balance");
+        return;
+      }
+
+      try {
+        const irys = await getIrysUploader();
+
+        setLoading(true);
+        console.log("funding...");
+        const fundTx = await irys.fund(irys.utils.toAtomic(amount));
+        console.log(`Successfully funded ${irys.utils.fromAtomic(fundTx.quantity)} ${irys.token}`);
+        alert("Funded Successfully");
+        // setLoading(false);
+        setAmountToFUnd("");
+      } catch (error: unknown) {
+        console.log("Error while funding", error);
+
+        // if (error.message.includes("user rejected action")) {
+        //   alert("User Rejected transaction");
+        // }
+
+        if (error instanceof Error && error.message.includes("user rejected action")) {
+          alert("User Rejected transaction");
+        } else {
+          console.error("Error while funding", error);
+        }
+      }
+
+      console.log("result", walletBalance);
+    } catch (error) {
+      console.log("Error when funding...", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!address) {
@@ -103,6 +208,8 @@ const Profile = () => {
 
     fetchProfileByUsername();
     fetchPost();
+    fetchUploadBalance();
+    fetchWalletInfo();
   }, [address, username]);
 
   return (
@@ -122,7 +229,9 @@ const Profile = () => {
                 <MessageSquare />
               </EmptyMedia>
               <EmptyTitle>No Profile Found</EmptyTitle>
-              <EmptyDescription>We couldn't find your profile. <br /> If you're sure this exists, pls try again.</EmptyDescription>
+              <EmptyDescription>
+                We couldn't find your profile. <br /> If you're sure this exists, pls try again.
+              </EmptyDescription>
             </EmptyHeader>
           </Empty>
         </div>
@@ -189,6 +298,85 @@ const Profile = () => {
                   <Calendar className="w-4 h-4" />
                   Joined {profileJoined}
                 </div>
+              </div>
+            </div>
+
+            {/* Wallet */}
+            <ConnectButton.Custom>
+              {({ account, chain, openChainModal, mounted }) => {
+                const ready = mounted;
+                const connected = ready && account && chain;
+                return (
+                  <div className="w-full flex flex-col items-center gap-6">
+                    {connected && (
+                      <>
+
+                        {/* Button to show network */}
+                        <button
+                          onClick={openChainModal}
+                          className="w-full bg-gray-800/50 hover:bg-gray-800 border border-gray-700 hover:border-main/50 rounded-lg px-4 py-3 flex items-center justify-between transition-all duration-200"
+                        >
+                          <div className="flex items-center gap-3">
+                            {chain.hasIcon && chain.iconUrl && <img alt={chain.name ?? "Chain icon"} src={chain.iconUrl || "/placeholder.svg"} className="w-6 h-6" />}
+                            <span className="text-white font-medium font-display-inter">{chain.name}</span>
+                          </div>
+                          <svg width="12" height="7" viewBox="0 0 12 7" fill="none" className="text-gray-400">
+                            <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      </>
+                    )}
+                  </div>
+                );
+              }}
+            </ConnectButton.Custom>
+
+            {/* Funding account and getting balance */}
+            <div className="flex flex-col gap-5 max-w-[300px] w-[80%] md:m-10 mb-5 mt-5 justify-between text-white">
+              <h1 className="">
+                Upload balance: <span className="text-[10px] text-[#51ffd6] italic">{uploadBalance}</span>
+              </h1>
+
+              <div className="flex justify-between items-center">
+                <Button disabled={loading} onClick={fetchUploadBalance} variant="default">
+                  Refresh
+                  <RotateCw className="cursor-pointer w-[15px]" />
+                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline">Fund</Button>
+                  </DialogTrigger>
+                  <DialogContent className="border-0  text-white">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-bold">Fund your Account</DialogTitle>
+                      <DialogDescription className="text-gray-400">Fund your upload account with custom testnet tokens</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-5  py-2">
+                      <div className="space-y-5  py-2">
+                        <div className="flex flex-col text-white">
+                          <h1>
+                            Current balance: <span className="text-[10px] text-[#51ffd6] italic">{walletBalance}</span>
+                          </h1>
+                          <h1>Current Network: {walletName}</h1>
+                        </div>
+                        <label className="block text-sm font-medium mb-1">Amount</label>
+                        <Input value={amountToFund} onChange={(e) => setAmountToFUnd(e.target.value)} className="bg-gray-900 border-gray-700 text-white" placeholder="0.0001" />
+                      </div>
+                      <div className="flex justify-between gap-3">
+                        <Button onClick={() => fundAccount(amountToFund)} disabled={loading} className="bg-primary text-black cursor-pointer">
+                          {loading ? (
+                            <>
+                              Funding
+                              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            </>
+                          ) : (
+                            "Fund"
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
 
