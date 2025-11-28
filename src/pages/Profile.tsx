@@ -18,7 +18,7 @@ import {
   SquarePen,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPosts } from "@/features/CreatePost/grapghqLQuery/queryposts";
+import { getUserPost } from "@/features/CreatePost/grapghqLQuery/queryposts";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { PostCard } from "@/components/Cards/PostCard";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -174,12 +174,17 @@ const Profile = () => {
       }
 
       setLoading(false);
+      return profile
     };
 
-    const fetchPost = async () => {
+    const fetchUserPost = async () => {
       try {
         setLoading(true);
-        const fetchedPosts = await getPosts();
+
+        const profile = await fetchProfileByUsername()
+        console.log("Profileffff", profile)
+
+        const fetchedPosts = await getUserPost(profile.username);
         const formattedPosts: Post[] = await Promise.all(
           fetchedPosts.map(async (post: any) => {
             const author = post.tags.find((t: any) => t.name === "author")?.value || "Anonymous";
@@ -207,7 +212,7 @@ const Profile = () => {
     };
 
     fetchProfileByUsername();
-    fetchPost();
+    fetchUserPost();
     fetchUploadBalance();
     fetchWalletInfo();
   }, [address, username]);
@@ -388,7 +393,7 @@ const Profile = () => {
           </div> */}
 
               <div className="text-center">
-                <p className="text-xl font-bold">3</p>
+                <p className="text-xl font-bold">{posts.length}</p>
                 <p className="text-xs text-muted-foreground">Posts</p>
               </div>
 

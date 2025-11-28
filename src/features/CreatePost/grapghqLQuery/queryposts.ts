@@ -10,7 +10,6 @@ interface EdgeProps {
   node: NodeProps;
 }
 
-const GRAPHQL_ENDPOINT = "https://devnet.irys.xyz/graphql";
 const GATEWAY_URL = "https://devnet.irys.xyz";
 
 export const getPosts = async () => {
@@ -61,7 +60,10 @@ export const getPosts = async () => {
   return posts;
 };
 
-export const getUserPost = async (author: string, username: string) => {
+// { name: "username", values: ["${username}"] }
+
+export const getUserPost = async (username: string) => {
+  console.log("Usernamerjrjr", username)
   const query = `
     query {
       transactions(
@@ -69,9 +71,9 @@ export const getUserPost = async (author: string, username: string) => {
           { name: "app-id", values: ["${import.meta.env.VITE_APP_ID}"] }
           { name: "type", values: ["${import.meta.env.VITE_TYPE_POST}"] }
           { name: "Content-Type", values: "text/html" },
-          { name: "author", values: ["${author}"] }
-          { name: "username", values: ["${username}"] },
+          { name: "username", values: ["${username}"] }
         ],
+        limit: 10
         order: DESC,
       ) {
         edges {
@@ -87,10 +89,27 @@ export const getUserPost = async (author: string, username: string) => {
     }
     `;
 
-  const response = await axios.post(GRAPHQL_ENDPOINT, { query });
-  console.log("Post Response:", response);
+  const { edges } = await graphqlQuery(query);
 
-  return response;
+  const posts = await Promise.all(
+    edges.map(async (edge: EdgeProps) => {
+      const { id } = edge.node;
+      const { tags } = edge.node;
+
+      // console.log("edge.node", edge.node);
+      const contentResponse = await axios.get(`${GATEWAY_URL}/${id}`, {
+        responseType: "text",
+      });
+
+      return {
+        id,
+        content: contentResponse.data,
+        tags: tags,
+      };
+    })
+  );
+
+  return posts;
 };
 
 // const getNotes = async (owner) => {
