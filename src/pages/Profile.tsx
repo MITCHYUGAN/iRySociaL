@@ -36,7 +36,7 @@ interface Post {
 }
 
 const Profile = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const [owner, setOwner] = useState(false);
   const [profile, setProfile] = useState("");
   const [profileUsername, setProfileUsername] = useState("");
@@ -146,9 +146,9 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (!address) {
-      return;
-    }
+    // if (!address) {
+    //   return;
+    // }
 
     const fetchProfileByUsername = async () => {
       setLoading(true);
@@ -156,33 +156,38 @@ const Profile = () => {
 
       const profile = await getProfileByUsername(cleanedUsername);
 
-      if (profile) {
-        setProfile(profile);
-        setProfileUsername(profile.username);
-        setProfileBio(profile.bio);
+      if (!profile) {
+        setLoading(false);
+        return;
+      }
 
-        const date = new Date(profile.createdAt).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-        });
+      console.log("Profile found", profile);
 
-        setProfileJoined(date);
+      setProfile(profile);
+      setProfileUsername(profile.username);
+      setProfileBio(profile.bio);
 
-        if (profile.author === address) {
-          setOwner(true);
-        }
+      const date = new Date(profile.createdAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+      });
+
+      setProfileJoined(date);
+
+      if (profile.author === address) {
+        setOwner(true);
       }
 
       setLoading(false);
-      return profile
+      return profile;
     };
 
     const fetchUserPost = async () => {
       try {
         setLoading(true);
 
-        const profile = await fetchProfileByUsername()
-        console.log("Profileffff", profile)
+        const profile = await fetchProfileByUsername();
+        console.log("Profileffff", profile);
 
         const fetchedPosts = await getUserPost(profile.username);
         const formattedPosts: Post[] = await Promise.all(
@@ -255,32 +260,27 @@ const Profile = () => {
                 {/* <Badge className="mt-2">Verified</Badge> */}
               </div>
 
-              {!owner ? (
-                <div className="flex gap-2 w-full sm:w-auto">
-                  <Button
-                  // onClick={() => setIsFollowing(!isFollowing)}
-                  // variant={isFollowing ? "outline" : "default"}
-                  // className={
-                  //   isFollowing ? "" : "bg-accent hover:bg-accent/90 text-accent-foreground w-full sm:w-auto"
-                  // }
-                  >
-                    {/* {isFollowing ? "Following" : "Follow"} */}
-                    Follow
-                  </Button>
-                  <Button
-                  // onClick={() => setIsSubscribed(!isSubscribed)}
-                  // className={`${isSubscribed ? "bg-secondary hover:bg-secondary/90" : "bg-primary hover:bg-primary/90"} w-full sm:w-auto`}
-                  >
-                    {/* {isSubscribed ? "Subscribed" : "Subscribe"} */}
-                    Subscribe
-                  </Button>
-                </div>
-              ) : (
+              {isConnected && (
                 <div>
-                  <Button className="cursor-pointer">
-                    <SquarePen />
-                    Edit Profile
-                  </Button>
+                  {!owner ? (
+                    <div className="flex gap-2 w-full sm:w-auto">
+                      <Button>
+                        {/* {isFollowing ? "Following" : "Follow"} */}
+                        Follow
+                      </Button>
+                      <Button>
+                        {/* {isSubscribed ? "Subscribed" : "Subscribe"} */}
+                        Subscribe
+                      </Button>
+                    </div>
+                  ) : (
+                    <div>
+                      <Button className="cursor-pointer">
+                        <SquarePen />
+                        Edit Profile
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -307,83 +307,88 @@ const Profile = () => {
             </div>
 
             {/* Wallet */}
-            <ConnectButton.Custom>
-              {({ account, chain, openChainModal, mounted }) => {
-                const ready = mounted;
-                const connected = ready && account && chain;
-                return (
-                  <div className="w-full flex flex-col items-center gap-6">
-                    {connected && (
-                      <>
 
-                        {/* Button to show network */}
-                        <button
-                          onClick={openChainModal}
-                          className="w-full bg-gray-800/50 hover:bg-gray-800 border border-gray-700 hover:border-main/50 rounded-lg px-4 py-3 flex items-center justify-between transition-all duration-200"
-                        >
-                          <div className="flex items-center gap-3">
-                            {chain.hasIcon && chain.iconUrl && <img alt={chain.name ?? "Chain icon"} src={chain.iconUrl || "/placeholder.svg"} className="w-6 h-6" />}
-                            <span className="text-white font-medium font-display-inter">{chain.name}</span>
-                          </div>
-                          <svg width="12" height="7" viewBox="0 0 12 7" fill="none" className="text-gray-400">
-                            <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                          </svg>
-                        </button>
-                      </>
-                    )}
-                  </div>
-                );
-              }}
-            </ConnectButton.Custom>
+            {isConnected && owner && (
+              <ConnectButton.Custom>
+                {({ account, chain, openChainModal, mounted }) => {
+                  const ready = mounted;
+                  const connected = ready && account && chain;
+                  return (
+                    <div className="w-full flex flex-col items-center gap-6">
+                      {connected && (
+                        <>
+                          {/* Button to show network */}
+                          <button
+                            onClick={openChainModal}
+                            className="w-full bg-gray-800/50 hover:bg-gray-800 border border-gray-700 hover:border-main/50 rounded-lg px-4 py-3 flex items-center justify-between transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-3">
+                              {chain.hasIcon && chain.iconUrl && <img alt={chain.name ?? "Chain icon"} src={chain.iconUrl || "/placeholder.svg"} className="w-6 h-6" />}
+                              <span className="text-white font-medium font-display-inter">{chain.name}</span>
+                            </div>
+                            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" className="text-gray-400">
+                              <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  );
+                }}
+              </ConnectButton.Custom>
+            )}
 
             {/* Funding account and getting balance */}
-            <div className="flex flex-col gap-5 max-w-[300px] w-[80%] md:m-10 mb-5 mt-5 justify-between text-white">
-              <h1 className="">
-                Upload balance: <span className="text-[10px] text-[#51ffd6] italic">{uploadBalance}</span>
-              </h1>
 
-              <div className="flex justify-between items-center">
-                <Button disabled={loading} onClick={fetchUploadBalance} variant="default">
-                  Refresh
-                  <RotateCw className="cursor-pointer w-[15px]" />
-                </Button>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline">Fund</Button>
-                  </DialogTrigger>
-                  <DialogContent className="border-0  text-white">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold">Fund your Account</DialogTitle>
-                      <DialogDescription className="text-gray-400">Fund your upload account with custom testnet tokens</DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-5  py-2">
+            {isConnected && owner && (
+              <div className="flex flex-col gap-5 max-w-[300px] w-[80%] md:m-10 mb-5 mt-5 justify-between text-white">
+                <h1 className="">
+                  Upload balance: <span className="text-[10px] text-[#51ffd6] italic">{uploadBalance}</span>
+                </h1>
+
+                <div className="flex justify-between items-center">
+                  <Button disabled={loading} onClick={fetchUploadBalance} variant="default">
+                    Refresh
+                    <RotateCw className="cursor-pointer w-[15px]" />
+                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Fund</Button>
+                    </DialogTrigger>
+                    <DialogContent className="border-0  text-white">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold">Fund your Account</DialogTitle>
+                        <DialogDescription className="text-gray-400">Fund your upload account with custom testnet tokens</DialogDescription>
+                      </DialogHeader>
                       <div className="space-y-5  py-2">
-                        <div className="flex flex-col text-white">
-                          <h1>
-                            Current balance: <span className="text-[10px] text-[#51ffd6] italic">{walletBalance}</span>
-                          </h1>
-                          <h1>Current Network: {walletName}</h1>
+                        <div className="space-y-5  py-2">
+                          <div className="flex flex-col text-white">
+                            <h1>
+                              Current balance: <span className="text-[10px] text-[#51ffd6] italic">{walletBalance}</span>
+                            </h1>
+                            <h1>Current Network: {walletName}</h1>
+                          </div>
+                          <label className="block text-sm font-medium mb-1">Amount</label>
+                          <Input value={amountToFund} onChange={(e) => setAmountToFUnd(e.target.value)} className="bg-gray-900 border-gray-700 text-white" placeholder="0.0001" />
                         </div>
-                        <label className="block text-sm font-medium mb-1">Amount</label>
-                        <Input value={amountToFund} onChange={(e) => setAmountToFUnd(e.target.value)} className="bg-gray-900 border-gray-700 text-white" placeholder="0.0001" />
+                        <div className="flex justify-between gap-3">
+                          <Button onClick={() => fundAccount(amountToFund)} disabled={loading} className="bg-primary text-black cursor-pointer">
+                            {loading ? (
+                              <>
+                                Funding
+                                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                              </>
+                            ) : (
+                              "Fund"
+                            )}
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex justify-between gap-3">
-                        <Button onClick={() => fundAccount(amountToFund)} disabled={loading} className="bg-primary text-black cursor-pointer">
-                          {loading ? (
-                            <>
-                              Funding
-                              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                            </>
-                          ) : (
-                            "Fund"
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-2 mb-6 p-4 bg-[#0e0e0e] rounded-lg">
