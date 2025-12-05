@@ -21,6 +21,7 @@ import { UserProvider } from "./context/UserContext.tsx";
 import Home from "./pages/Home.tsx";
 import { SidebarProvider } from "./components/ui/sidebar.tsx";
 import App from "./App.tsx";
+import ArticlePage from "./pages/ArticlePage.tsx";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
           { path: "/articles", element: <Articles /> },
           { path: "/videos", element: <Videos /> },
           { path: "/profile/:username", element: <Profile /> },
+          { path: "/article/:id", element: <ArticlePage /> },
         ],
       },
       { path: "/onboarding/profile", element: <CreateProfile /> },
