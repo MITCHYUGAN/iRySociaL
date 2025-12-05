@@ -39,23 +39,53 @@ export const getArticles = async () => {
 
   const { edges } = await graphqlQuery(query);
 
-  const articles = await Promise.all(
-    edges.map(async (edge: EdgeProps) => {
-      const { id } = edge.node;
-      const { tags } = edge.node;
+const articles = await Promise.all(
+    edges.map(async (edge: any) => {
+      const id = edge.node.id;
+      const tags = edge.node.tags.reduce((acc: any, t: any) => {
+        acc[t.name] = t.value;
+        return acc;
+      }, {});
 
-      // console.log("edge.node", edge.node);
-      const contentResponse = await axios.get(`${GATEWAY_URL}/${id}`);
+      try {
+        const res = await fetch(`https://gateway.irys.xyz/${id}`);
+        const rawText = await res.text();
 
-      return {
-        id,
-        jsonBlocks: contentResponse.data,
-        tags: tags,
-      };
+        // CHANGE: Parse ONCE and validate
+        let blocks;
+        try {
+          blocks = JSON.parse(rawText);
+        } catch (e) {
+          console.error("Failed to parse JSON for article:", id);
+          return null;
+        }
+
+        // CHANGE: Must be array and non-empty
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          console.warn("Article has no blocks:", id);
+          return null;
+        }
+
+        // Extract title from first heading
+        const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+
+        return {
+          id,
+          title,
+          username: tags.username || "anonymous",
+          author: tags.author || "unknown",
+          blocks, // ← This is now a clean array of blocks
+          createdAt: Date.now(),
+        };
+      } catch (err) {
+        console.error("Failed to load article:", id, err);
+        return null;
+      }
     })
   );
 
-  return articles;
+  return articles.filter(Boolean);
 };
 
 // export const getUserArticles = async (author: string, username: string) => {
