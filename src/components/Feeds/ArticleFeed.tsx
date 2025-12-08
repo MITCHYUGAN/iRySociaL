@@ -1,6 +1,3 @@
-// src/components/Feeds/ArticleFeed.tsx
-"use client";
-
 import { ArticleCard } from "../Cards/ArticleCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";

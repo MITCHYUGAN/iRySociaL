@@ -63,7 +63,6 @@ export const getPosts = async () => {
 // { name: "username", values: ["${username}"] }
 
 export const getUserPost = async (username: string) => {
-  console.log("Usernamerjrjr", username)
   const query = `
     query {
       transactions(

@@ -42,9 +42,9 @@ export function ArticleCard({ article }: ArticleCardProps) {
   return (
     <div
       onClick={() => navigate(`/article/${article.id}`)}
-      className="bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group"
+      className="h-[350px] grid place-items-center"
     >
-      <div className="flex gap-6">
+      <div className="flex gap-6 h-full w-full width bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
         {/* Cover Image Placeholder */}
         <div className="hidden sm:block w-[30%] bg-secondary/50 rounded-lg overflow-hidden shrink-0 border border-border/50">
           <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
@@ -56,7 +56,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
             <div className="flex-1">
-              <h3 className="font-bold text-2xl line-clamp-2 group-hover:text-primary transition">
+              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">
                 {article.title || "Untitled Article"}
               </h3>
             </div>
