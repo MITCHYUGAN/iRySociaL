@@ -137,12 +137,16 @@ export const getUserArticles = async (username: string) => {
         const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
         const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
 
+        const coverImageBlock = blocks.find((b: any) => b.type === "image");
+        const coverImage = coverImageBlock?.props?.url;
+
         return {
           id,
           title,
           username: tags.username || "anonymous",
           author: tags.author || "unknown",
           blocks, // ← This is now a clean array of blocks
+          coverImage,
           createdAt: Date.now(),
         };
       } catch (err) {

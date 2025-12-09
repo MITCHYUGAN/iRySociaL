@@ -10,6 +10,9 @@ const transformArticle = (art: any) => {
       .join(" ")
       .slice(0, 160) || "No preview...";
 
+  const coverImageBlock = art.blocks.find((b: any) => b.type === "image");
+  const coverImage = coverImageBlock?.props?.url;
+
   return {
     id: art.id,
     title: art.title,
@@ -17,6 +20,7 @@ const transformArticle = (art: any) => {
     username: art.username,
     author: art.author,
     createdAt: art.createdAt || Date.now(),
+    coverImage,
     isGated: false,
   };
 };

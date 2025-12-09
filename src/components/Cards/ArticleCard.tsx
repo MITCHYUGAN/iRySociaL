@@ -12,6 +12,7 @@ interface Article {
   username: string;
   author: string;
   createdAt?: string | number;
+  coverImage?: string;
   isGated?: boolean;
 }
 
@@ -40,40 +41,45 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const readingTime = Math.max(1, Math.ceil(article.preview.split(" ").length / 200));
 
   return (
-    <div
-      onClick={() => navigate(`/article/${article.id}`)}
-      className="h-[350px] grid place-items-center"
-    >
-      <div className="flex gap-6 h-full w-full width bg-card border border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
+    <div className="h-[350px] grid place-items-center">
+      <div className="flex gap-6 h-full w-full overflow-hidden border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
         {/* Cover Image Placeholder */}
-        <div className="hidden sm:block w-[30%] bg-secondary/50 rounded-lg overflow-hidden shrink-0 border border-border/50">
-          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
-            No cover
+        {/* <div className="hidden sm:block w-[30%] bg-secondary/50 rounded-lg overflow-hidden shrink-0 border border-border/50">
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">No cover</div>
+        </div> */}
+
+        {article.coverImage && (
+          <div onClick={() => navigate(`/article/${article.id}`)} className="hidden sm:block w-[40%] rounded-lg overflow-hidden shrink-0 border border-border/50">
+            <img src={article.coverImage} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
           </div>
-        </div>
+        )}
+
+        {/* <div className="hidden sm:block w-[40%] rounded-lg overflow-hidden shrink-0 border border-border/50">
+          {
+            article.coverImage && <img src={article.coverImage} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+            // : (
+            //   <div className="w-full h-full bg-secondary/50 flex items-center justify-center text-muted-foreground text-xs">No cover</div>
+            // )
+          }
+        </div> */}
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-2">
+          <div className="flex items-start justify-between gap-2 mb-2" onClick={() => navigate(`/article/${article.id}`)}>
             <div className="flex-1">
-              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">
-                {article.title || "Untitled Article"}
-              </h3>
+              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">{article.title || "Untitled Article"}</h3>
             </div>
             {article.isGated && <Lock className="w-4 h-4 text-accent shrink-0 mt-1" />}
           </div>
 
-          <p className="text-[18px] text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
-            {article.preview || "No preview available..."}
-          </p>
+          <p onClick={() => navigate(`/article/${article.id}`)} className="text-[18px] text-muted-foreground line-clamp-2 mb-4 leading-relaxed">{article.preview || "No preview available..."}</p>
 
           <div className="flex items-center justify-between">
+            <a href={`/profile/${article.username}`}>
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
                 <AvatarImage src={`https://github.com/${article.username}.png`} />
-                <AvatarFallback className="text-xs">
-                  {article.username.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
+                <AvatarFallback className="text-xs">{article.username.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-semibold text-sm">@{article.username}</p>
@@ -82,6 +88,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
                 </p>
               </div>
             </div>
+            </a>
             <Heart className="w-5 h-5 text-muted-foreground hover:text-red-500 transition group-hover:scale-110" />
           </div>
         </div>

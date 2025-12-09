@@ -255,6 +255,15 @@
   border: 0.5px solid rgba(35, 35, 35, 0.69);
 }
 
+.article-border{
+  border: 1px solid #242424;
+}
+
+.article-border-radius{
+  border-radius: 20px;
+}
+
+
 .width {
   max-width: 800px;
 }
@@ -278,3 +287,14 @@
     font-size: 17px !important;
   }
 }
+
+
+
+/* ===================================== Blocknote Editor stylings ===================================== */
+.bn-editor {
+  background-color: #0a0a0a !important;
+}
+/* 
+[data-content-type=heading] {
+    --level: 4em !important;
+} */

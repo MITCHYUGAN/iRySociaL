@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { AlertCircleIcon, ArrowLeft, CheckCircle2Icon, Wallet, XIcon } from "lucide-react";
+import { AlertCircleIcon, ArrowLeft, CheckCircle2Icon, Upload, Wallet, X, XIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 
@@ -26,6 +26,9 @@ const CreateArticlePage = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const [coverImage, setCoverImage] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
   const handleArticleUpload = async () => {
     console.log("contents", blocks);
 
@@ -48,6 +51,24 @@ const CreateArticlePage = () => {
 
       // CHANGE: Stringify JSON
       // const jsonContent = JSON.stringify(editor.document);
+
+      if (coverImage) {
+        editor.insertBlocks(
+          [
+            {
+              type: "image",
+              props: {
+                url: coverImage,
+                caption: "",
+                showPreview: true,
+                textAlignment: "center",
+              },
+            },
+          ],
+          editor.document[0],
+          "before"
+        );
+      }
 
       // CHANGE: Upload JSON to Irys
       const postId = await createarticle(editor.document, author, username);
@@ -86,6 +107,22 @@ const CreateArticlePage = () => {
     }
   }
 
+  const uploadCover = async (file: File) => {
+    setUploading(true);
+    try {
+      const irys = await getIrysUploader();
+      const receipt = await irys.uploadFile(file, {
+        tags: [{ name: "Content-Type", value: file.type }],
+      });
+      const url = `https://gateway.irys.xyz/${receipt.id}`;
+      setCoverImage(url);
+    } catch (err) {
+      alert("Cover upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const editor = useCreateBlockNote({
     initialContent: [
       {
@@ -96,9 +133,9 @@ const CreateArticlePage = () => {
         type: "paragraph",
         content: "Tell your story",
       },
-      {
-        type: "paragraph",
-      },
+      // {
+      //   type: "paragraph",
+      // },
     ],
     uploadFile,
   });
@@ -131,7 +168,7 @@ const CreateArticlePage = () => {
         </Empty>
       ) : (
         <div className="w-full flex flex-col items-center max-md:p-7">
-          <div className="w-[70%] mx-auto px-4 py-8 flex flex-col gap-10">
+          <div className="w-[80%] mx-auto px-4 py-8 flex flex-col gap-10">
             <section className="flex flex-col items-start gap-3">
               <Button
                 variant="link"
@@ -150,6 +187,31 @@ const CreateArticlePage = () => {
               </p> */}
             </section>
 
+            <div className="relative w-full h-[20vh] bg-none border-border">
+              {coverImage ? (
+                <img src={coverImage} alt="Cover" className="w-full h-full object-cover" />
+              ) : (
+                <label className="flex flex-col items-center justify-center h-full cursor-pointer group">
+                  <Upload className="w-16 h-16 text-muted-foreground group-hover:text-foreground transition" />
+                  <p className="mt-4 text-lg text-muted-foreground group-hover:text-foreground">Drag image or click to add cover image</p>
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
+                </label>
+              )}
+              {coverImage && (
+                <Button size="icon" variant="destructive" className="absolute top-6 right-6" onClick={() => setCoverImage(null)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              )}
+              {uploading && (
+                <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mb-4" />
+                    <p>Uploading cover...</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <BlockNoteView
               title="Helle"
               onChange={() => {
@@ -167,35 +229,35 @@ const CreateArticlePage = () => {
 
             <Button onClick={handleArticleUpload}>Publish on Irys</Button>
           </div>
-
-          {isError && (
-            <Alert variant={"destructive"} className="w-[60%] z-100 md:w-[400px] absolute bottom-20 right-6">
-              <AlertCircleIcon />
-              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsError(false)}>
-                <XIcon className="size-5" />
-                <span className="sr-only">Close</span>
-              </button>
-              <AlertDescription>{errorMessage.slice(0, 100)}</AlertDescription>
-            </Alert>
-          )}
-
-          {isArticleCreated && (
-            <Alert variant={"default"} className="w-[60%] z-100 md:w-[400px] absolute bottom-20 right-6 border-primary">
-              <CheckCircle2Icon className="text-primary" />
-              <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsArticleCreated(false)}>
-                <XIcon className="size-5" />
-                <span className="sr-only">Close</span>
-              </button>
-              <AlertTitle className="max-md:text-[15px] text-primary">Successful</AlertTitle>
-              <AlertDescription className="max-md:text-[12px]">
-                Your post has been uploaded successfully
-                <a className="text-primary underline" target="blank_" href={`${PostId}`}>
-                  View here
-                </a>
-              </AlertDescription>
-            </Alert>
-          )}
         </div>
+      )}
+
+      {isError && (
+        <Alert variant={"destructive"} className="w-[60%] z-100 md:w-[400px] fixed bottom-20 right-6">
+          <AlertCircleIcon />
+          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsError(false)}>
+            <XIcon className="size-5" />
+            <span className="sr-only">Close</span>
+          </button>
+          <AlertDescription>{errorMessage.slice(0, 100)}</AlertDescription>
+        </Alert>
+      )}
+
+      {isArticleCreated && (
+        <Alert variant={"default"} className="w-[60%] z-100 md:w-[400px] fixed bottom-20 right-6 border-primary">
+          <CheckCircle2Icon className="text-primary" />
+          <button className="cursor-pointer absolute right-3 top-3" onClick={() => setIsArticleCreated(false)}>
+            <XIcon className="size-5" />
+            <span className="sr-only">Close</span>
+          </button>
+          <AlertTitle className="max-md:text-[15px] text-primary">Successful</AlertTitle>
+          <AlertDescription className="max-md:text-[12px]">
+            Your post has been uploaded successfully
+            <a className="text-primary underline" target="blank_" href={`${PostId}`}>
+              View here
+            </a>
+          </AlertDescription>
+        </Alert>
       )}
     </div>
   );
