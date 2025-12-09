@@ -5,7 +5,7 @@ const GATEWAY_URL = "https://devnet.irys.xyz";
 
 export const graphqlQuery = async (query: string) => {
   const response = await axios.post(GRAPHQL_ENDPOINT, { query });
-  console.log("GraphQL Response", response.data)
+  // console.log("GraphQL Response", response.data)
 
   if(response.data.errors){
     console.error("GraphQL Errors:", response.data.errors)

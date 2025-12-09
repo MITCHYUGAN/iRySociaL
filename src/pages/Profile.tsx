@@ -165,8 +165,6 @@ const Profile = () => {
         return;
       }
 
-      console.log("Profile found", profile);
-
       setProfile(profile);
       setProfileUsername(profile.username);
       setProfileBio(profile.bio);
@@ -191,7 +189,6 @@ const Profile = () => {
         setLoading(true);
 
         const profile = await fetchProfileByUsername();
-        console.log("Profileffff", profile);
 
         const fetchedPosts = await getUserPost(profile.username);
         const formattedPosts: Post[] = await Promise.all(

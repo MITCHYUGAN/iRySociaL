@@ -83,7 +83,7 @@ export function PostCard({ featured = false, content, username, likes, comments 
           </button>
         </div>
       </div>
-      <hr className="border mt-10 w-full" />
+      <hr className="border mt-10 mb-10 w-full" />
     </div>
   );
 }

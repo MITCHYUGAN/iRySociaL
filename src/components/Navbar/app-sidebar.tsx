@@ -64,8 +64,6 @@ export function AppSidebar() {
 
   const username = profile?.username || "";
 
-  console.log("Profile", profile);
-
   const moreitems = [
     {
       title: "Profile",

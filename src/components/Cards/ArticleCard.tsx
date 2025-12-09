@@ -41,7 +41,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
   const readingTime = Math.max(1, Math.ceil(article.preview.split(" ").length / 200));
 
   return (
-    <div className="h-[350px] grid place-items-center">
+    <div className="flex h-[350px] flex-col w-full grid place-items-center">
       <div className="width-article flex gap-6 h-full w-full overflow-hidden border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
         {/* Cover Image Placeholder */}
         {/* <div className="hidden sm:block w-[30%] bg-secondary/50 rounded-lg overflow-hidden shrink-0 border border-border/50">
@@ -93,7 +93,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         </div>
       </div>
-      <hr className="border mt-10 w-full" />
+      <hr className="border mt-10 mb-10 w-full" />
     </div>
   );
 }

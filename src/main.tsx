@@ -21,7 +21,7 @@ import { UserProvider } from "./context/UserContext.tsx";
 import Home from "./pages/Home.tsx";
 import { SidebarProvider } from "./components/ui/sidebar.tsx";
 import App from "./App.tsx";
-import ArticlePage from "./pages/ArticlePage.tsx";
+import ArticlePage from "./pages/ArticleDetail.tsx";
 
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
