@@ -42,7 +42,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
   return (
     <div className="h-[350px] grid place-items-center">
-      <div className="flex gap-6 h-full w-full overflow-hidden border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
+      <div className="width-article flex gap-6 h-full w-full overflow-hidden border-border rounded-lg p-4 hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group">
         {/* Cover Image Placeholder */}
         {/* <div className="hidden sm:block w-[30%] bg-secondary/50 rounded-lg overflow-hidden shrink-0 border border-border/50">
           <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">No cover</div>
@@ -93,6 +93,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         </div>
       </div>
+      <hr className="border mt-10 w-full" />
     </div>
   );
 }
