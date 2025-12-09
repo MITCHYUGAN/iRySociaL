@@ -29,11 +29,33 @@ const CreateArticlePage = () => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
+  // const isEditorEmpty = () => {
+  //   const document = editor.document;
+
+  //   // Check if the document has only one block
+  //   if (document.length === 1) {
+  //     const firstBlock = document[0];
+
+  //     console.log("First Block", firstBlock)
+
+  //     // Check if the first block is a paragraph type
+  //     if (firstBlock.type === "heading") {
+  //       // Check if the paragraph's content array is empty or contains only whitespace
+  //       if (!firstBlock.content || firstBlock.content.length === 0) {
+  //         return true; // The editor is considered empty
+  //       }
+  //     }
+  //   }
+
+  //   // For all other cases, it's not empty
+  //   return false;
+  // };
+
   const handleArticleUpload = async () => {
     console.log("contents", blocks);
 
-    if (!editor.document.length) {
-      alert("Add some content!");
+    if (!blocks.length) {
+      alert("Editor is empty, cannot save.");
       return;
     }
 
@@ -94,7 +116,6 @@ const CreateArticlePage = () => {
     }
   };
 
-  // Uploads a file to tmpfiles.org and returns the URL to the uploaded file.
   async function uploadFile(file: File) {
     try {
       const irys = await getIrysUploader();
@@ -117,7 +138,12 @@ const CreateArticlePage = () => {
       const url = `https://gateway.irys.xyz/${receipt.id}`;
       setCoverImage(url);
     } catch (err) {
-      alert("Cover upload failed");
+      const message = err instanceof Error ? err.message : "An unexpected error occurred";
+
+      setTimeout(function () {
+        setIsError(true);
+        setErrorMessage(message);
+      }, 1000);
     } finally {
       setUploading(false);
     }
@@ -133,15 +159,12 @@ const CreateArticlePage = () => {
         type: "paragraph",
         content: "Tell your story",
       },
-      // {
-      //   type: "paragraph",
-      // },
     ],
     uploadFile,
   });
 
   return (
-    <div className="w-full h-screen flex flex-col items-center max-md:mt-[100px] mt-[40px]">
+    <div className="w-full h-screen flex flex-col items-center max-md:mt-[100px] mt-[40px] article-page">
       {!address ? (
         <Empty>
           <EmptyHeader>
@@ -168,8 +191,8 @@ const CreateArticlePage = () => {
         </Empty>
       ) : (
         <div className="w-full flex flex-col items-center max-md:p-7">
-          <div className="w-[80%] mx-auto px-4 py-8 flex flex-col gap-10">
-            <section className="flex flex-col items-start gap-3">
+          <div className="w-[70%] mx-auto px-4 py-8 flex flex-col gap-10">
+            <section className="flex justify-between items-start gap-3">
               <Button
                 variant="link"
                 className="cursor-pointer"
@@ -185,9 +208,11 @@ const CreateArticlePage = () => {
               {/* <p className="text-1xl md:text-[20px] text-muted-foreground">
                 Store your post permanently on <span className="text-primary">Irys</span>
               </p> */}
+
+              <Button className="py-[25px] px-[20px] text-1xl text-black cursor-pointer" onClick={handleArticleUpload}>Publish on Irys</Button>
             </section>
 
-            <div className="relative w-full h-[20vh] bg-none border-border">
+            <div className="relative w-full h-[20vh] bg-none article-border rounded-3xl">
               {coverImage ? (
                 <img src={coverImage} alt="Cover" className="w-full h-full object-cover" />
               ) : (
@@ -197,11 +222,13 @@ const CreateArticlePage = () => {
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
                 </label>
               )}
+
               {coverImage && (
                 <Button size="icon" variant="destructive" className="absolute top-6 right-6" onClick={() => setCoverImage(null)}>
                   <X className="h-5 w-5" />
                 </Button>
               )}
+
               {uploading && (
                 <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
                   <div className="text-center">
@@ -213,7 +240,8 @@ const CreateArticlePage = () => {
             </div>
 
             <BlockNoteView
-              title="Helle"
+              title="Publish your content on Irys!"
+              className="p-0 h-[30vh]"
               onChange={() => {
                 // Sets the document JSON whenever the editor content changes.
                 setBlocks(editor.document);
@@ -226,8 +254,6 @@ const CreateArticlePage = () => {
                 }
               }
             />
-
-            <Button onClick={handleArticleUpload}>Publish on Irys</Button>
           </div>
         </div>
       )}

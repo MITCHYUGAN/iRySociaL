@@ -294,7 +294,11 @@
 .bn-editor {
   background-color: #0a0a0a !important;
 }
-/* 
-[data-content-type=heading] {
+
+/* .article-page [data-content-type=heading] {
     --level: 4em !important;
 } */
+
+.ProseMirror {
+  padding: 0 !important;
+}
