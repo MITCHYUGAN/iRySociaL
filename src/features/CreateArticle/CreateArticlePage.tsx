@@ -55,7 +55,7 @@ const CreateArticlePage = () => {
     console.log("contents", blocks);
 
     if (!blocks.length) {
-      alert("Editor is empty, cannot save.");
+      alert("Your Editor is empty");
       return;
     }
 
@@ -191,7 +191,7 @@ const CreateArticlePage = () => {
         </Empty>
       ) : (
         <div className="w-full flex flex-col items-center max-md:p-7">
-          <div className="w-[70%] mx-auto px-4 py-8 flex flex-col gap-10">
+          <div className="w-full md:w-[70%] max-w-[1000px] mx-auto px-4 py-8 flex flex-col gap-10">
             <section className="flex justify-between items-start gap-3">
               <Button
                 variant="link"
@@ -217,8 +217,8 @@ const CreateArticlePage = () => {
                 <img src={coverImage} alt="Cover" className="w-full h-full object-cover" />
               ) : (
                 <label className="flex flex-col items-center justify-center h-full cursor-pointer group">
-                  <Upload className="w-16 h-16 text-muted-foreground group-hover:text-foreground transition" />
-                  <p className="mt-4 text-lg text-muted-foreground group-hover:text-foreground">Drag image or click to add cover image</p>
+                  <Upload className="w-12 h-12 md:w-16 md:h-16 text-muted-foreground group-hover:text-foreground transition" />
+                  <p className="mt-4 text-[14px] text-center md:text-lg text-muted-foreground group-hover:text-foreground">Drag image or click to add cover image</p>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
                 </label>
               )}
