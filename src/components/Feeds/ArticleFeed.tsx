@@ -1,5 +1,5 @@
 import { ArticleCard } from "../Cards/ArticleCard";
-import { Skeleton } from "@/components/ui/skeleton";
+// import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useArticles } from "@/lib/queries";
@@ -34,13 +34,13 @@ export default function ArticleFeed() {
             <EmptyMedia variant="icon">
               <MessageSquare />
             </EmptyMedia>
-            <EmptyTitle>No Post Found</EmptyTitle>
-            <EmptyDescription>We couldn't find any post yet. Get started by creating your first post.</EmptyDescription>
+            <EmptyTitle>No Articles Found</EmptyTitle>
+            <EmptyDescription>We couldn't find any Articles yet. Get started by creating your first Article.</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <div className="flex gap-2">
-              <Button className="cursor-pointer" onClick={() => navigate("/create/post")}>
-                Create Post
+              <Button className="cursor-pointer" onClick={() => navigate("/create/article")}>
+                Create Article
               </Button>
             </div>
           </EmptyContent>

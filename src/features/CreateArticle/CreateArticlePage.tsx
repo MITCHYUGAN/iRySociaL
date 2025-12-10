@@ -60,7 +60,8 @@ const CreateArticlePage = () => {
     }
 
     const firstBlock = editor.document[0];
-    const title = firstBlock.type === "heading" ? firstBlock.content.map((c) => c.text).join("") : "Untitled Article";
+    // const title = firstBlock.type === "heading" ? firstBlock.content.map((c) => c.text).join("") : "Untitled Article";
+    const title = firstBlock.type === "heading" ? firstBlock.content.map((c) => c.text).join("") : "";
 
     try {
       if (!address) {

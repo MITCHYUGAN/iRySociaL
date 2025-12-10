@@ -67,7 +67,8 @@ export function ArticleCard({ article }: ArticleCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2" onClick={() => navigate(`/article/${article.id}`)}>
             <div className="flex-1">
-              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">{article.title || "Untitled Article"}</h3>
+              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">{article.title}</h3>
+              {/* <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">{article.title || "Untitled Article"}</h3> */}
             </div>
             {article.isGated && <Lock className="w-4 h-4 text-accent shrink-0 mt-1" />}
           </div>

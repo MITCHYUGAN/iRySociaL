@@ -10,83 +10,127 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, MessageSquare } from "lucide-react";
 import axios from "axios";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { useArticleById } from "@/lib/queries";
 
 const GATEWAY_URL = "https://gateway.irys.xyz";
 
 export default function ArticlePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [article, setArticle] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  // const [article, setArticle] = useState<any>(null);
 
-  // CHANGE: Create editor at top level — always
+  const { data: article, isLoading, error } = useArticleById(id);
+  console.log("Dattattata", article);
+
   const editor = useCreateBlockNote();
 
   useEffect(() => {
-    if (!id) {
-      setError(true);
-      setLoading(false);
+    if (!article?.blocks || !Array.isArray(article.blocks)) {
       return;
     }
 
-    const fetchArticle = async () => {
-      try {
-        const res = await axios.get(`${GATEWAY_URL}/${id}`);
-        const raw = res.data;
+    let finalContent = article.blocks;
 
-        let blocks;
-        try {
-          blocks = typeof raw === "string" ? JSON.parse(raw) : raw;
-        } catch (e) {
-          throw new Error("Invalid article data");
-        }
+    console.log({ finalContent });
+    console.log("Arrticle Blocks", article.blocks);
 
-        if (!Array.isArray(blocks) || blocks.length === 0) {
-          throw new Error("Article is empty");
-        }
+    const firstHeading = article.blocks[0];
 
-        // CHANGE: Extract title from first heading
-        const titleBlockIndex = blocks.findIndex((b: any) => b.type === "heading" && b.content?.length > 0);
+    let title = article.title;
 
-        let title = "Untitled";
-        let contentBlocks = blocks;
+    // Case 1: First block is heading → use it as title, remove from content
+    if (finalContent[0]?.type === "heading" && finalContent[0]?.content?.length > 0) {
+      title = finalContent[0].content.map((c: any) => c.text || "").join("");
+      finalContent = finalContent.slice(1); // Remove heading
+    }
 
-        if (titleBlockIndex !== -1) {
-          title = blocks[titleBlockIndex].content?.map((c: any) => c.text || "").join("") || "Untitled";
+    // Case 2: First block is image → keep image, remove the SECOND block if it's heading
+    if (finalContent[0]?.type === "image" && finalContent[1]?.type === "heading") {
+      // Extract title from second block
+      title = finalContent[1].content?.map((c: any) => c.text || "").join("") || title;
+      finalContent = finalContent.filter((_, i) => i !== 1); // Remove second block only
+    }
 
-          // CHANGE: Remove the title block from content
-          contentBlocks = blocks.filter((_: any, i: number) => i !== titleBlockIndex);
-        }
+    // // Remove the first block if it has a type of heading
+    // if (firstHeading.type === "heading") {
+    //   finalContent = article.blocks.slice(1, 160) || "No preview...";
+    // }
 
-        // CHANGE: Get username from tags
-        const tagsRes = await axios.get(`${GATEWAY_URL}/${id}`);
-        const tagsHeader = tagsRes.headers["x-irys-tags"] || "";
-        const usernameMatch = tagsHeader.match(/username:([^,]+)/);
-        const username = usernameMatch ? usernameMatch[1] : "anonymous";
+    // // remove the second block if the first block has a type of image, (meaning the user added a preview image)
+    // // So remove just the second block. display the first remove the second, and continue to display the rest from the third
+    // if (firstHeading.type === "image") {
+    //   finalContent = article.blocks.slice(0, 160) || "No preview...";
+    // }
 
-        setArticle({ id, title, username, blocks: contentBlocks });
-      } catch (err) {
-        console.error("Failed to load article:", err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
+    document.title = `${title} — Irys Social`
 
-    fetchArticle();
-  }, [id]);
+    editor.replaceBlocks(editor.document, finalContent);
+  }, [article, editor]);
+
+  // useEffect(() => {
+  //   if (!id) {
+  //     setError(true);
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   const fetchArticle = async () => {
+  //     try {
+  //       const res = await axios.get(`${GATEWAY_URL}/${id}`);
+  //       const raw = res.data;
+
+  //       let blocks;
+  //       try {
+  //         blocks = typeof raw === "string" ? JSON.parse(raw) : raw;
+  //       } catch (e) {
+  //         throw new Error("Invalid article data");
+  //       }
+
+  //       if (!Array.isArray(blocks) || blocks.length === 0) {
+  //         throw new Error("Article is empty");
+  //       }
+
+  //       // CHANGE: Extract title from first heading
+  //       const titleBlockIndex = blocks.findIndex((b: any) => b.type === "heading" && b.content?.length > 0);
+
+  //       let title = "Untitled";
+  //       let contentBlocks = blocks;
+
+  //       if (titleBlockIndex !== -1) {
+  //         title = blocks[titleBlockIndex].content?.map((c: any) => c.text || "").join("") || "Untitled";
+
+  //         // CHANGE: Remove the title block from content
+  //         contentBlocks = blocks.filter((_: any, i: number) => i !== titleBlockIndex);
+  //       }
+
+  //       // CHANGE: Get username from tags
+  //       const tagsRes = await axios.get(`${GATEWAY_URL}/${id}`);
+  //       const tagsHeader = tagsRes.headers["x-irys-tags"] || "";
+  //       const usernameMatch = tagsHeader.match(/username:([^,]+)/);
+  //       const username = usernameMatch ? usernameMatch[1] : "anonymous";
+
+  //       setArticle({ id, title, username, blocks: contentBlocks });
+  //     } catch (err) {
+  //       console.error("Failed to load article:", err);
+  //       setError(true);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchArticle();
+  // }, [id]);
 
   // CHANGE: Load content blocks (without title)
-  useEffect(() => {
-    if (article?.blocks) {
-      editor.replaceBlocks(editor.document, article.blocks);
-    }
-  }, [article, editor]);
+  // useEffect(() => {
+  //   if (article?.blocks) {
+  //     editor.replaceBlocks(editor.document, article.blocks);
+  //   }
+  // }, [article, editor]);
 
   return (
     <div className="min-h-screen bg-background w-full">
-      {loading ? (
+      {isLoading ? (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mb-4"></div>

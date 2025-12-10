@@ -58,7 +58,8 @@ export const getArticles = async () => {
 
         // Extract title from first heading
         const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
-        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+        // const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "";
 
         return {
           id,
@@ -135,7 +136,91 @@ export const getUserArticles = async (username: string) => {
 
         // Extract title from first heading
         const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
-        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "";
+        // const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+
+        const coverImageBlock = blocks.find((b: any) => b.type === "image");
+        const coverImage = coverImageBlock?.props?.url;
+
+        return {
+          id,
+          title,
+          username: tags.username || "anonymous",
+          author: tags.author || "unknown",
+          blocks, // ← This is now a clean array of blocks
+          coverImage,
+          createdAt: Date.now(),
+        };
+      } catch (err) {
+        console.error("Failed to load article:", id, err);
+        return null;
+      }
+    })
+  );
+
+  return articles.filter(Boolean);
+};
+
+export const getArticlesById = async (articleId: string) => {
+
+  console.log("Artcile ID", articleId)
+
+  const query = `
+    query {
+      transactions(
+        ids: "${articleId}",
+        tags: [
+          { name: "app-id", values: ["${import.meta.env.VITE_APP_ID}"] }
+          { name: "type", values: ["${import.meta.env.VITE_TYPE_ARTICLE}"] }
+          { name: "Content-Type", values: "application/json" },
+        ]
+      ) {
+        edges {
+          node {
+            id
+            tags {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+    `;
+
+  const { edges } = await graphqlQuery(query);
+
+  const articles = await Promise.all(
+    edges.map(async (edge: any) => {
+      const id = edge.node.id;
+      const tags = edge.node.tags.reduce((acc: any, t: any) => {
+        acc[t.name] = t.value;
+        return acc;
+      }, {});
+
+      try {
+        const res = await fetch(`${GATEWAY_URL}/${id}`);
+        const rawText = await res.text();
+
+        // CHANGE: Parse ONCE and validate
+        let blocks;
+        try {
+          blocks = JSON.parse(rawText);
+        } catch (e) {
+          console.error("Failed to parse JSON for article:", id);
+          return null;
+        }
+
+        // CHANGE: Must be array and non-empty
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          console.warn("Article has no blocks:", id);
+          return null;
+        }
+
+        // Extract title from first heading
+        const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "";
+        // const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
 
         const coverImageBlock = blocks.find((b: any) => b.type === "image");
         const coverImage = coverImageBlock?.props?.url;
