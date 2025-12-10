@@ -129,7 +129,7 @@ export default function ArticlePage() {
   // }, [article, editor]);
 
   return (
-    <div className="min-h-screen bg-background w-full">
+    <div className="min-h-screen bg-background article-detail w-full">
       {isLoading ? (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
@@ -188,7 +188,7 @@ export default function ArticlePage() {
 
           <div className="width-article w-full mx-auto px-6 py-16">
             <article className="prose prose-invert prose-lg max-w-none">
-              <BlockNoteView editor={editor} editable={false} theme="dark" data-custom-font-demo />
+              <BlockNoteView editor={editor} editable={false} theme="dark" />
             </article>
           </div>
         </div>

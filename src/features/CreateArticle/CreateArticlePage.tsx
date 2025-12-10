@@ -54,6 +54,39 @@ const CreateArticlePage = () => {
   //   return false;
   // };
 
+  async function uploadFile(file: File) {
+    try {
+      const irys = await getIrysUploader();
+      const tags = [{ name: "Content-Type", value: file.type }];
+      const receipt = await irys.uploadFile(file, { tags });
+      return `https://gateway.irys.xyz/${receipt.id}`;
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      throw error; // Let BlockNote handle error UI
+    }
+  }
+
+  const uploadCover = async (file: File) => {
+    setUploading(true);
+    try {
+      const irys = await getIrysUploader();
+      const receipt = await irys.uploadFile(file, {
+        tags: [{ name: "Content-Type", value: file.type }],
+      });
+      const url = `https://gateway.irys.xyz/${receipt.id}`;
+      setCoverImage(url);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred";
+
+      setTimeout(function () {
+        setIsError(true);
+        setErrorMessage(message);
+      }, 1000);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleArticleUpload = async () => {
     console.log("contents", blocks);
 
@@ -117,38 +150,38 @@ const CreateArticlePage = () => {
     }
   };
 
-  async function uploadFile(file: File) {
-    try {
-      const irys = await getIrysUploader();
-      const tags = [{ name: "Content-Type", value: file.type }];
-      const receipt = await irys.uploadFile(file, { tags });
-      return `https://gateway.irys.xyz/${receipt.id}`;
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      throw error; // Let BlockNote handle error UI
-    }
-  }
+  // SHow placeholders instead
+  // const customPlaceholders = {
+  //   heading: "Title...",
+  //   paragraph: "Tell your story...",
+  // };
 
-  const uploadCover = async (file: File) => {
-    setUploading(true);
-    try {
-      const irys = await getIrysUploader();
-      const receipt = await irys.uploadFile(file, {
-        tags: [{ name: "Content-Type", value: file.type }],
-      });
-      const url = `https://gateway.irys.xyz/${receipt.id}`;
-      setCoverImage(url);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "An unexpected error occurred";
-
-      setTimeout(function () {
-        setIsError(true);
-        setErrorMessage(message);
-      }, 1000);
-    } finally {
-      setUploading(false);
-    }
-  };
+  // const editor = useCreateBlockNote({
+  //   // Override the default dictionary for placeholders
+  //   dictionary: {
+  //     ...en, // Keep existing English translations
+  //     placeholders: {
+  //       ...en.placeholders, // Keep existing placeholders (e.g., image block placeholder)
+  //       // Set custom placeholders for the relevant block types:
+  //       heading: customPlaceholders.heading,
+  //       paragraph: customPlaceholders.paragraph,
+  //       // Optional: Custom placeholder for an entirely empty document
+  //       // emptyDocument: "Start writing your document...",
+  //     },
+  //   },
+  //   // Initialize with empty blocks
+  //   initialContent: [
+  //     {
+  //       type: "heading",
+  //       content: [],
+  //     },
+  //     {
+  //       type: "paragraph",
+  //       content: [],
+  //     },
+  //   ],
+  //   uploadFile,
+  // });
 
   const editor = useCreateBlockNote({
     dictionary: {
@@ -163,11 +196,11 @@ const CreateArticlePage = () => {
     initialContent: [
       {
         type: "heading",
-        content: "Title",
+        content: "Title...",
       },
       {
         type: "paragraph",
-        content: "Tell your story",
+        content: "Tell your story...",
       },
     ],
     uploadFile,

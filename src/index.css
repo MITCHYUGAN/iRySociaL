@@ -10,7 +10,7 @@
 @custom-variant dark (&:is(.dark *));
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap");
 
 .post-content img {
   width: 100%;
@@ -208,6 +208,10 @@
   }
 }
 
+body {
+  font-family: "Google Sans Flex", sans-serif;
+}
+
 /* ================================== My own styling to overide default ==================================*/
 
 /* Sidebar spacing */
@@ -311,22 +315,54 @@
   display: none !important;
 } */
 
-bn-block-content::before{
+bn-block-content::before {
   content: "" !important;
 }
 
-.bn-container[data-custom-font-demo] .bn-editor * {
-  font-family: "Montserrat", sans-serif;
-  /* font-optical-sizing: auto; */
-  /* font-weight: normal;
-  font-style: normal; */
-  letter-spacing: 1px; 
-}
+/* .bn-container[data-custom-font-demo] .bn-editor * {
+  font-family: "Georgia", serif; 
+} */
 
-.h1textfamily {
-  font-family: "Georgia", serif !important; /* Replace with your desired font stack */
-}
+/* .h1textfamily {
+  font-family: "Georgia", serif !important;
+} */
 
-.ProseMirror {
+/* .ProseMirror {
   padding: 0 !important;
+} */
+
+.article-detail .bn-inline-content:has(> .ProseMirror-trailingBreak:only-child):before {
+  color: transparent;
 }
+
+/* .bn-block-content:not(:first-child) [data-placeholder]:empty::before {
+  display: none !important;
+} */
+
+/* .bn-block-content > .bn-inline-content:first-of-type{
+  background-color: yellow ;
+}
+
+.ProseMirror-trailingBreak:first-of-type {
+  background-color: red;
+} */
+
+
+/* Target the first block container */
+/* .bn-block-group .bn-block-outer:nth-child(1) {
+  opacity: 1 !important;
+  color: inherit !important;
+  background-color: red;
+} */
+
+/* Target the second block container */
+/* .bn-block-group .bn-block-outer:nth-child(2){
+  background-color: pink;
+} */
+
+/* Crucial step: Hide placeholders on all other subsequent blocks */
+/* .bn-block-group .bn-block-outer:nth-child(n+3){
+  content: none !important;
+  color: transparent !important;
+  background-color: yellow;
+} */
