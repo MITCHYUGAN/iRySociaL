@@ -54,20 +54,11 @@ export function ArticleCard({ article }: ArticleCardProps) {
           </div>
         )}
 
-        {/* <div className="hidden sm:block w-[40%] rounded-lg overflow-hidden shrink-0 border border-border/50">
-          {
-            article.coverImage && <img src={article.coverImage} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-            // : (
-            //   <div className="w-full h-full bg-secondary/50 flex items-center justify-center text-muted-foreground text-xs">No cover</div>
-            // )
-          }
-        </div> */}
-
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2" onClick={() => navigate(`/article/${article.id}`)}>
             <div className="flex-1">
-              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">{article.title}</h3>
+              <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition h1textfamily">{article.title}</h3>
               {/* <h3 className="font-bold text-4xl line-clamp-2 group-hover:text-primary transition">{article.title || "Untitled Article"}</h3> */}
             </div>
             {article.isGated && <Lock className="w-4 h-4 text-accent shrink-0 mt-1" />}

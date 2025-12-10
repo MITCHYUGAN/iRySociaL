@@ -89,7 +89,6 @@ export const getUserArticles = async (username: string) => {
           { name: "Content-Type", values: "application/json" },
           { name: "username", values: ["${username}"] }
         ],
-        limit: 10
         order: DESC,
       ) {
         edges {

@@ -10,6 +10,8 @@
 @custom-variant dark (&:is(.dark *));
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 .post-content img {
   width: 100%;
   /* width: min(200px, 100); */
@@ -299,9 +301,31 @@
   font-size: 20px !important;
 }
 
-/* .article-page [data-content-type=heading] {
-    --level: 4em !important;
+/* h1 .bn-inline-content{
+  content: "" !important;
+  display: none !important;
 } */
+
+/* bn-inline-content::before{
+  content: "" !important;
+  display: none !important;
+} */
+
+bn-block-content::before{
+  content: "" !important;
+}
+
+.bn-container[data-custom-font-demo] .bn-editor * {
+  font-family: "Montserrat", sans-serif;
+  /* font-optical-sizing: auto; */
+  /* font-weight: normal;
+  font-style: normal; */
+  letter-spacing: 1px; 
+}
+
+.h1textfamily {
+  font-family: "Georgia", serif !important; /* Replace with your desired font stack */
+}
 
 .ProseMirror {
   padding: 0 !important;

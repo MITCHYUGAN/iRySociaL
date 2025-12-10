@@ -167,7 +167,7 @@ export default function ArticlePage() {
             </Button>
 
             {/* Beautiful Title */}
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-8 tracking-tight">{article.title}</h1>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-8 tracking-tight h1textfamily">{article.title}</h1>
 
             <div className="flex items-center justify-between text-muted-foreground">
               <div className="flex items-center gap-4">
@@ -188,7 +188,7 @@ export default function ArticlePage() {
 
           <div className="width-article w-full mx-auto px-6 py-16">
             <article className="prose prose-invert prose-lg max-w-none">
-              <BlockNoteView editor={editor} editable={false} theme="dark" />
+              <BlockNoteView editor={editor} editable={false} theme="dark" data-custom-font-demo />
             </article>
           </div>
         </div>

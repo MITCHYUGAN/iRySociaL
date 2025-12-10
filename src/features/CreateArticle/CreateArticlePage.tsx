@@ -4,7 +4,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { AlertCircleIcon, ArrowLeft, CheckCircle2Icon, Upload, Wallet, X, XIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
-
 import "@blocknote/core/fonts/inter.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
@@ -15,6 +14,10 @@ import { getIrysUploader } from "@/lib/irys";
 import { getProfile } from "../Profile/onboarding/grapghqLQuery/queryprofile";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { createarticle } from "./create-article";
+
+import { en } from "@blocknote/core/locales";
+
+import { queryClient } from "@/lib/queryClient";
 
 const CreateArticlePage = () => {
   // const [isGated, setIsGated] = useState(false);
@@ -72,9 +75,6 @@ const CreateArticlePage = () => {
       const { username, author } = await getProfile(address);
       if (!username || !author) throw new Error("Profile not found");
 
-      // CHANGE: Stringify JSON
-      // const jsonContent = JSON.stringify(editor.document);
-
       if (coverImage) {
         editor.insertBlocks(
           [
@@ -93,10 +93,10 @@ const CreateArticlePage = () => {
         );
       }
 
-      // CHANGE: Upload JSON to Irys
       const postId = await createarticle(editor.document, author, username);
 
-      // CHANGE: Show success alert like profile creation
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+
       setPostId(`https://gateway.irys.xyz/${postId}`);
 
       setTimeout(function () {
@@ -151,6 +151,15 @@ const CreateArticlePage = () => {
   };
 
   const editor = useCreateBlockNote({
+    dictionary: {
+      ...en, // Keep existing translations
+      placeholders: {
+        // ...en.placeholders, // Keep existing placeholders
+        // default: "Type your content here...", // Custom default
+        heading: "", // Custom heading placeholder
+        // emptyDocument: "Start writing your document...", // Custom empty doc
+      },
+    },
     initialContent: [
       {
         type: "heading",
@@ -210,7 +219,9 @@ const CreateArticlePage = () => {
                 Store your post permanently on <span className="text-primary">Irys</span>
               </p> */}
 
-              <Button className="py-[25px] px-[20px] text-1xl text-black cursor-pointer" onClick={handleArticleUpload}>Publish on Irys</Button>
+              <Button className="py-[25px] px-[20px] text-1xl text-black cursor-pointer" onClick={handleArticleUpload}>
+                Publish on Irys
+              </Button>
             </section>
 
             <div className="relative w-full h-[20vh] bg-none article-border rounded-3xl">
@@ -254,6 +265,7 @@ const CreateArticlePage = () => {
                   // Otherwise, the default ShadCN components will be used.
                 }
               }
+              data-custom-font-demo
             />
           </div>
         </div>
