@@ -12,9 +12,9 @@ export default function ArticleFeed() {
 
   return (
     <section className="w-full grid place-items-center">
-      {articles.map((article) => (
+      {/* {articles.map((article) => (
         <ArticleCard key={article.id} article={article} />
-      ))}
+      ))} */}
 
       {isLoading ? (
         // <div className="space-y-8 mt-10">
