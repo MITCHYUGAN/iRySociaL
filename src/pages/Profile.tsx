@@ -53,7 +53,7 @@ const Profile = () => {
   const [walletName, setWalletName] = useState("Not found");
   const [amountToFund, setAmountToFUnd] = useState("0.001");
 
-  const { data: articles = [], isLoading: articlesLoading } = useUserArticles(username);
+  const { data: articles = [], isLoading: articlesLoading } = useUserArticles(username ?? "");
   console.log("Datatatata", articles);
 
   // Fetch user balance
@@ -241,7 +241,7 @@ const Profile = () => {
               </EmptyMedia>
               <EmptyTitle>No Profile Found</EmptyTitle>
               <EmptyDescription>
-                We couldn't find your profile. <br /> If you're sure this exists, pls try again.
+                We couldn't find your profile. <br /> Pls crosscheck your username and try again
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
