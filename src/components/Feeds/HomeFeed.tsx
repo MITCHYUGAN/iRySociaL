@@ -33,9 +33,8 @@ const HomeFeeds = () => {
   const { address } = useAccount();
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const { data: articles = [], isLoading: articlesLoading } = useArticles();
-
-  const loading = articlesLoading;
+  const { data: articles = [] } = useArticles();
+  // const { data: articles = [], isLoading: articlesLoading } = useArticles();
 
   useEffect(() => {
     const fetchPost = async () => {

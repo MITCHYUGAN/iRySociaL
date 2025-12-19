@@ -1,18 +1,15 @@
 // src/pages/ArticlePage.tsx — FINAL FIXED VERSION (No duplicate title)
 "use client";
 
-import { useParams, useNavigate, data } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/shadcn/style.css";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, MessageSquare } from "lucide-react";
-import axios from "axios";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { useArticleById } from "@/lib/queries";
-
-const GATEWAY_URL = "https://gateway.irys.xyz";
 
 export default function ArticlePage() {
   const { id } = useParams<{ id: string }>();
@@ -34,7 +31,7 @@ export default function ArticlePage() {
     console.log({ finalContent });
     console.log("Arrticle Blocks", article.blocks);
 
-    const firstHeading = article.blocks[0];
+    // const firstHeading = article.blocks[0];
 
     let title = article.title;
 

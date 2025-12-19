@@ -32,28 +32,6 @@ const CreateArticlePage = () => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // const isEditorEmpty = () => {
-  //   const document = editor.document;
-
-  //   // Check if the document has only one block
-  //   if (document.length === 1) {
-  //     const firstBlock = document[0];
-
-  //     console.log("First Block", firstBlock)
-
-  //     // Check if the first block is a paragraph type
-  //     if (firstBlock.type === "heading") {
-  //       // Check if the paragraph's content array is empty or contains only whitespace
-  //       if (!firstBlock.content || firstBlock.content.length === 0) {
-  //         return true; // The editor is considered empty
-  //       }
-  //     }
-  //   }
-
-  //   // For all other cases, it's not empty
-  //   return false;
-  // };
-
   async function uploadFile(file: File) {
     try {
       const irys = await getIrysUploader();
@@ -87,11 +65,20 @@ const CreateArticlePage = () => {
     }
   };
 
+  const hasRealContent = blocks.some((block) => {
+    if (block.type === "image") return true;
+
+    return block.content?.some((item) => {
+      const text = item.text.trim();
+      return text && text.length > 0 && !["Title...", "Tell your story..."].includes(text);
+    });
+  });
+
   const handleArticleUpload = async () => {
     console.log("contents", blocks);
 
-    if (!blocks.length) {
-      alert("Your Editor is empty");
+    if (!hasRealContent) {
+      alert("Please add some content to your article!");
       return;
     }
 
@@ -108,22 +95,24 @@ const CreateArticlePage = () => {
       const { username, author } = await getProfile(address);
       if (!username || !author) throw new Error("Profile not found");
 
-      if (coverImage) {
-        editor.insertBlocks(
-          [
-            {
-              type: "image",
-              props: {
-                url: coverImage,
-                caption: "",
-                showPreview: true,
-                textAlignment: "center",
+      console.log("CovebehhImagess", coverImage);
+
+      if (coverImage && editor.document[0].props.url !== coverImage) {
+          editor.insertBlocks(
+            [
+              {
+                type: "image",
+                props: {
+                  url: coverImage,
+                  caption: "",
+                  showPreview: true,
+                  textAlignment: "center",
+                },
               },
-            },
-          ],
-          editor.document[0],
-          "before"
-        );
+            ],
+            editor.document[0],
+            "before"
+          );
       }
 
       const postId = await createarticle(editor.document, author, username);
@@ -235,7 +224,7 @@ const CreateArticlePage = () => {
       ) : (
         <div className="w-full flex flex-col items-center max-md:p-7">
           <div className="w-full md:w-[70%] max-w-[1000px] mx-auto px-4 py-8 flex flex-col gap-10">
-            <section className="flex justify-between items-start gap-3">
+            <section className="flex justify-between items-center gap-3">
               <Button
                 variant="link"
                 className="cursor-pointer"
@@ -263,7 +252,8 @@ const CreateArticlePage = () => {
               ) : (
                 <label className="flex flex-col items-center justify-center h-full cursor-pointer group">
                   <Upload className="w-12 h-12 md:w-16 md:h-16 text-muted-foreground group-hover:text-foreground transition" />
-                  <p className="mt-4 text-[14px] text-center md:text-lg text-muted-foreground group-hover:text-foreground">Drag image or click to add cover image</p>
+                  {/* Drag image or  */}
+                  <p className="mt-4 text-[14px] text-center md:text-lg text-muted-foreground group-hover:text-foreground">Click to add cover image</p>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadCover(e.target.files[0])} />
                 </label>
               )}

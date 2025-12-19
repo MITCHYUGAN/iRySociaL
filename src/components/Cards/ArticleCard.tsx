@@ -1,6 +1,3 @@
-// src/components/Cards/ArticleCard.tsx
-"use client";
-
 import { Heart, Lock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
