@@ -25,6 +25,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { getIrysUploader } from "@/lib/irys";
 import { ethers, type AddressLike } from "ethers";
 import { Input } from "@/components/ui/input";
+import { useUserArticles } from "@/lib/queries";
 // import { Spinner } from "@/components/ui/spinner";
 
 interface Post {
@@ -51,6 +52,9 @@ const Profile = () => {
   const [walletBalance, setWalletBalance] = useState("Not Found");
   const [walletName, setWalletName] = useState("Not found");
   const [amountToFund, setAmountToFUnd] = useState("0.001");
+
+  const { data: articles = [], isLoading: articlesLoading } = useUserArticles(username ?? "");
+  console.log("Datatatata", articles);
 
   // Fetch user balance
   const fetchUploadBalance = async () => {
@@ -161,8 +165,6 @@ const Profile = () => {
         return;
       }
 
-      console.log("Profile found", profile);
-
       setProfile(profile);
       setProfileUsername(profile.username);
       setProfileBio(profile.bio);
@@ -187,7 +189,6 @@ const Profile = () => {
         setLoading(true);
 
         const profile = await fetchProfileByUsername();
-        console.log("Profileffff", profile);
 
         const fetchedPosts = await getUserPost(profile.username);
         const formattedPosts: Post[] = await Promise.all(
@@ -240,7 +241,7 @@ const Profile = () => {
               </EmptyMedia>
               <EmptyTitle>No Profile Found</EmptyTitle>
               <EmptyDescription>
-                We couldn't find your profile. <br /> If you're sure this exists, pls try again.
+                We couldn't find your profile. <br /> Pls crosscheck your username and try again
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
@@ -403,7 +404,7 @@ const Profile = () => {
               </div>
 
               <div className="text-center">
-                <p className="text-xl font-bold">2</p>
+                <p className="text-xl font-bold">{articles.length}</p>
                 <p className="text-xs text-muted-foreground">Articles</p>
               </div>
               <div className="text-center">
@@ -447,7 +448,7 @@ const Profile = () => {
                         <MessageSquare />
                       </EmptyMedia>
                       <EmptyTitle>No Post Found</EmptyTitle>
-                      <EmptyDescription>We couldn't find any post yet. Get started by creating your first post.</EmptyDescription>
+                      <EmptyDescription>We couldn't find any our your post. Get started by creating your first post.</EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
                       <div className="flex gap-2">
@@ -463,9 +464,33 @@ const Profile = () => {
               </TabsContent>
 
               <TabsContent value="articles" className="mt-6 space-y-4">
-                {[1, 2].map((i) => (
-                  <ArticleCard key={i} isGated={i % 2 === 0} />
-                ))}
+                {articlesLoading ? (
+                  <div className="grid place-items-center w-full h-screen">
+                    <div className="flex flex-col items-center gap-[10px]">
+                      <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-main border-t-transparent mb-4"></div>
+                      <h1>Fetching Articles...</h1>
+                    </div>
+                  </div>
+                ) : articles.length === 0 ? (
+                  <Empty>
+                    <EmptyHeader>
+                      <EmptyMedia variant="icon">
+                        <MessageSquare />
+                      </EmptyMedia>
+                      <EmptyTitle>No Article Found</EmptyTitle>
+                      <EmptyDescription>We couldn't find any of your article. Get started by creating your first article.</EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                      <div className="flex gap-2">
+                        <Button className="cursor-pointer" onClick={() => navigate("/create/article")}>
+                          Create Article
+                        </Button>
+                      </div>
+                    </EmptyContent>
+                  </Empty>
+                ) : (
+                  articles.map((a) => <ArticleCard key={a.id} article={a} />)
+                )}
               </TabsContent>
 
               <TabsContent value="videos" className="mt-6 space-y-4">

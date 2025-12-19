@@ -64,8 +64,6 @@ export function AppSidebar() {
 
   const username = profile?.username || "";
 
-  console.log("Profile", profile);
-
   const moreitems = [
     {
       title: "Profile",
@@ -95,7 +93,8 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar className="w-[300px]">
+    <Sidebar >
+    {/* <Sidebar className="w-[350px]"> */}
       <SidebarHeader>
         <X className="md:hidden absolute right-5" onClick={() => toggleSidebar()} />
         <div className="flex flex-col items-start mt-5 gap-5">

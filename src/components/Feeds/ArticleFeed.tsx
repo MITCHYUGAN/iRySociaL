@@ -1,17 +1,53 @@
-import { ArticleCard } from "../Cards/ArticleCard"
+import { ArticleCard } from "../Cards/ArticleCard";
+// import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useArticles } from "@/lib/queries";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../ui/empty";
+import { MessageSquare } from "lucide-react";
 
-const ArticleFeed = () => {
+export default function ArticleFeed() {
+  const { data: articles = [], isLoading } = useArticles();
+  const navigate = useNavigate();
+
   return (
-    <section className="flex flex-col gap-7 mt-10">
-        <ArticleCard />
-        <ArticleCard />
-        <ArticleCard />
-        <ArticleCard />
-        <ArticleCard />
-        <ArticleCard />
-        <ArticleCard />
-    </section>
-  )
-}
+    <section className="w-full grid place-items-center">
+      {articles.map((article) => (
+        <ArticleCard key={article.id} article={article} />
+      ))}
 
-export default ArticleFeed
+      {isLoading ? (
+        // <div className="space-y-8 mt-10">
+        //   {[...Array(4)].map((_, i) => (
+        //     <Skeleton key={i} className="h-48 w-full rounded-xl" />
+        //   ))}
+        // </div>
+        <div className="grid place-items-center w-full h-screen">
+          <div className="flex flex-col items-center gap-[10px]">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-main border-t-transparent mb-4"></div>
+            <h1>Fetching Articles...</h1>
+          </div>
+        </div>
+      ) : articles.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <MessageSquare />
+            </EmptyMedia>
+            <EmptyTitle>No Articles Found</EmptyTitle>
+            <EmptyDescription>We couldn't find any Articles yet. Get started by creating your first Article.</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <div className="flex gap-2">
+              <Button className="cursor-pointer" onClick={() => navigate("/create/article")}>
+                Create Article
+              </Button>
+            </div>
+          </EmptyContent>
+        </Empty>
+      ) : (
+        articles.map((article) => <ArticleCard key={article.id} article={article} />)
+      )}
+    </section>
+  );
+}

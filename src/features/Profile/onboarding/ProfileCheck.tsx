@@ -17,12 +17,15 @@ const ProfileCheck = () => {
     }
 
     const CheckProfile = async () => {
-      const profile = await getProfile(address);
+      try {
+        const profile = await getProfile(address);
 
-      if (address && !profile) {
-        navigate("/onboarding/profile");
+        if (address && !profile) {
+          navigate("/onboarding/profile");
+        }
+      } catch (error) {
+        console.error("Error while fetching profile", error);
       }
-
       ///. ========= Login to reload profile page on wallet change.
       // if (address && profile) {
       //   console.log("Profilesssyy", profile);

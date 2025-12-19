@@ -3,9 +3,9 @@ import { Newspaper } from "lucide-react";
 
 const Articles = () => {
   return (
-    <div className="pt-5 lg:py-10 px-5">
-      <div className="flex gap-4 flex-col">
-        <div className="flex items-center gap-3">
+    <div className="w-full flex flex-col items-center pt-5 ">
+      <div className="flex gap-4 width-article mb-10 w-full flex-col">
+        <div className="flex w-full items-center gap-3">
           <Newspaper className="text-primary" />
           <h1 className="text-[40px] font-semibold">Articles</h1>
         </div>

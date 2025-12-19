@@ -25,7 +25,7 @@ export function PostCard({ featured = false, content, username, likes, comments 
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className={`width max-xl:px-10 w-full border-none rounded-lg hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${featured ? "ring-2 ring-accent/30" : ""}`}>
+      <div className={`width w-full border-none rounded-lg hover:border-accent/50 transition-all hover:shadow-lg hover:shadow-accent/10 cursor-pointer group ${featured ? "ring-2 ring-accent/30" : ""}`}>
         <div className="flex w-full items-start justify-between mb-3">
           <a href={`/profile/${username}`}>
             <div className="flex items-center gap-3 flex-1">
@@ -83,7 +83,7 @@ export function PostCard({ featured = false, content, username, likes, comments 
           </button>
         </div>
       </div>
-      <hr className="border mt-10 w-full" />
+      <hr className="border mt-10 mb-10 w-full" />
     </div>
   );
 }

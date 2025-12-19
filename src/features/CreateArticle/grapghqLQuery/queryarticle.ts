@@ -1,16 +1,5 @@
 import { graphqlQuery } from "@/features/Profile/onboarding/grapghqLQuery/queryprofile";
-import axios from "axios";
 
-interface NodeProps {
-  id: string;
-  tags: object;
-}
-
-interface EdgeProps {
-  node: NodeProps;
-}
-
-const GRAPHQL_ENDPOINT = "https://devnet.irys.xyz/graphql";
 const GATEWAY_URL = "https://devnet.irys.xyz";
 
 export const getArticles = async () => {
@@ -19,8 +8,86 @@ export const getArticles = async () => {
       transactions(
         tags: [
           { name: "app-id", values: ["${import.meta.env.VITE_APP_ID}"] }
-          { name: "type", values: ["${import.meta.env.VITE_TYPE_POST}"] }
-          { name: "Content-Type", values: "text/html" },
+          { name: "type", values: ["${import.meta.env.VITE_TYPE_ARTICLE}"] }
+          { name: "Content-Type", values: "application/json" },
+        ],
+        limit: 10
+        order: DESC,
+      ) {
+        edges {
+          node {
+            id
+            tags {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+    `;
+
+  const { edges } = await graphqlQuery(query);
+
+  const articles = await Promise.all(
+    edges.map(async (edge: any) => {
+      const id = edge.node.id;
+      const tags = edge.node.tags.reduce((acc: any, t: any) => {
+        acc[t.name] = t.value;
+        return acc;
+      }, {});
+
+      try {
+        const res = await fetch(`${GATEWAY_URL}/${id}`);
+        const rawText = await res.text();
+
+        // CHANGE: Parse ONCE and validate
+        let blocks;
+        try {
+          blocks = JSON.parse(rawText);
+        } catch (e) {
+          console.error("Failed to parse JSON for article:", id);
+          return null;
+        }
+
+        // CHANGE: Must be array and non-empty
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          console.warn("Article has no blocks:", id);
+          return null;
+        }
+
+        // Extract title from first heading
+        const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
+        // const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "";
+
+        return {
+          id,
+          title,
+          username: tags.username || "anonymous",
+          author: tags.author || "unknown",
+          blocks, // ← This is now a clean array of blocks
+          createdAt: Date.now(),
+        };
+      } catch (err) {
+        console.error("Failed to load article:", id, err);
+        return null;
+      }
+    })
+  );
+
+  return articles.filter(Boolean);
+};
+
+export const getUserArticles = async (username: string) => {
+  const query = `
+    query {
+      transactions(
+        tags: [
+          { name: "app-id", values: ["${import.meta.env.VITE_APP_ID}"] }
+          { name: "type", values: ["${import.meta.env.VITE_TYPE_ARTICLE}"] }
+          { name: "Content-Type", values: "application/json" },
+          { name: "username", values: ["${username}"] }
         ],
         order: DESC,
       ) {
@@ -39,39 +106,73 @@ export const getArticles = async () => {
 
   const { edges } = await graphqlQuery(query);
 
-  const posts = await Promise.all(
-    edges.map(async (edge: EdgeProps) => {
-      const { id } = edge.node;
-      const { tags } = edge.node;
+  const articles = await Promise.all(
+    edges.map(async (edge: any) => {
+      const id = edge.node.id;
+      const tags = edge.node.tags.reduce((acc: any, t: any) => {
+        acc[t.name] = t.value;
+        return acc;
+      }, {});
 
-      // console.log("edge.node", edge.node);
-      const contentResponse = await axios.get(`${GATEWAY_URL}/${id}`, {
-        responseType: "text",
-      });
+      try {
+        const res = await fetch(`${GATEWAY_URL}/${id}`);
+        const rawText = await res.text();
 
-      return {
-        id,
-        content: contentResponse.data,
-        tags: tags,
-      };
+        // CHANGE: Parse ONCE and validate
+        let blocks;
+        try {
+          blocks = JSON.parse(rawText);
+        } catch (e) {
+          console.error("Failed to parse JSON for article:", id);
+          return null;
+        }
+
+        // CHANGE: Must be array and non-empty
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          console.warn("Article has no blocks:", id);
+          return null;
+        }
+
+        // Extract title from first heading
+        const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "";
+        // const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+
+        const coverImageBlock = blocks.find((b: any) => b.type === "image");
+        const coverImage = coverImageBlock?.props?.url;
+
+        return {
+          id,
+          title,
+          username: tags.username || "anonymous",
+          author: tags.author || "unknown",
+          blocks, // ← This is now a clean array of blocks
+          coverImage,
+          createdAt: Date.now(),
+        };
+      } catch (err) {
+        console.error("Failed to load article:", id, err);
+        return null;
+      }
     })
   );
 
-  return posts;
+  return articles.filter(Boolean);
 };
 
-export const getUserArticles = async (author: string, username: string) => {
+export const getArticlesById = async (articleId: string) => {
+
+  console.log("Artcile ID", articleId)
+
   const query = `
     query {
       transactions(
+        ids: "${articleId}",
         tags: [
           { name: "app-id", values: ["${import.meta.env.VITE_APP_ID}"] }
-          { name: "type", values: ["${import.meta.env.VITE_TYPE_POST}"] }
-          { name: "Content-Type", values: "text/html" },
-          { name: "author", values: ["${author}"] }
-          { name: "username", values: ["${username}"] },
-        ],
-        order: DESC,
+          { name: "type", values: ["${import.meta.env.VITE_TYPE_ARTICLE}"] }
+          { name: "Content-Type", values: "application/json" },
+        ]
       ) {
         edges {
           node {
@@ -86,8 +187,58 @@ export const getUserArticles = async (author: string, username: string) => {
     }
     `;
 
-  const response = await axios.post(GRAPHQL_ENDPOINT, { query });
-  console.log("Post Response:", response);
+  const { edges } = await graphqlQuery(query);
 
-  return response;
+  const articles = await Promise.all(
+    edges.map(async (edge: any) => {
+      const id = edge.node.id;
+      const tags = edge.node.tags.reduce((acc: any, t: any) => {
+        acc[t.name] = t.value;
+        return acc;
+      }, {});
+
+      try {
+        const res = await fetch(`${GATEWAY_URL}/${id}`);
+        const rawText = await res.text();
+
+        // CHANGE: Parse ONCE and validate
+        let blocks;
+        try {
+          blocks = JSON.parse(rawText);
+        } catch (e) {
+          console.error("Failed to parse JSON for article:", id);
+          return null;
+        }
+
+        // CHANGE: Must be array and non-empty
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          console.warn("Article has no blocks:", id);
+          return null;
+        }
+
+        // Extract title from first heading
+        const titleBlock = blocks.find((b: any) => b.type === "heading" && b.content?.length > 0);
+        const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "";
+        // const title = titleBlock?.content?.map((c: any) => c.text || "").join("") || "Untitled";
+
+        const coverImageBlock = blocks.find((b: any) => b.type === "image");
+        const coverImage = coverImageBlock?.props?.url;
+
+        return {
+          id,
+          title,
+          username: tags.username || "anonymous",
+          author: tags.author || "unknown",
+          blocks, // ← This is now a clean array of blocks
+          coverImage,
+          createdAt: Date.now(),
+        };
+      } catch (err) {
+        console.error("Failed to load article:", id, err);
+        return null;
+      }
+    })
+  );
+
+  return articles.filter(Boolean);
 };

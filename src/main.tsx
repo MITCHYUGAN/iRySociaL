@@ -4,7 +4,7 @@ import "./index.css";
 import { ThemeProvider } from "./features/Dark_LightMode/theme-provider.tsx";
 import { WagmiProvider } from "wagmi";
 import { config } from "./lib/wagmi.ts";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
@@ -21,8 +21,10 @@ import { UserProvider } from "./context/UserContext.tsx";
 import Home from "./pages/Home.tsx";
 import { SidebarProvider } from "./components/ui/sidebar.tsx";
 import App from "./App.tsx";
+import ArticlePage from "./pages/ArticleDetail.tsx";
 
-const queryClient = new QueryClient();
+import { queryClient } from "./lib/queryClient.ts";
+
 const router = createBrowserRouter([
   {
     element: <ProfileCheck />,
@@ -36,6 +38,7 @@ const router = createBrowserRouter([
           { path: "/articles", element: <Articles /> },
           { path: "/videos", element: <Videos /> },
           { path: "/profile/:username", element: <Profile /> },
+          { path: "/article/:id", element: <ArticlePage /> },
         ],
       },
       { path: "/onboarding/profile", element: <CreateProfile /> },

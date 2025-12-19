@@ -4,8 +4,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source "../node_modules/@blocknote/shadcn";
+@source "/Users/mac/Documents/Irys/My-Projects/IrysSocials/node_modules";
+
 @custom-variant dark (&:is(.dark *));
 @tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap");
 
 .post-content img {
   width: 100%;
@@ -203,6 +208,10 @@
   }
 }
 
+body {
+  font-family: "Google Sans Flex", sans-serif;
+}
+
 /* ================================== My own styling to overide default ==================================*/
 
 /* Sidebar spacing */
@@ -224,7 +233,7 @@
   border-color: rgba(38, 38, 38, 0.69);
 }
 
-.postwidth{
+.postwidth {
   width: 100% !important;
 }
 
@@ -249,11 +258,22 @@
 }
 
 .border {
-  border: 0.5px solid rgba(35, 35, 35, 0.69);
+  /* border: 0.5px solid rgba(215, 27, 27, 0.69); */
+  border: 0.5px solid rgb(61 59 59 / 69%);
+}
+
+.article-border {
+  border: 1px solid #242424;
 }
 
 .width {
-  max-width: 800px;
+  max-width: 700px;
+  padding: 0 30px;
+}
+
+.width-article {
+  max-width: 950px;
+  padding: 0 30px;
 }
 
 .iconsize {
@@ -275,3 +295,74 @@
     font-size: 17px !important;
   }
 }
+
+/* ===================================== Blocknote Editor stylings ===================================== */
+.bn-editor {
+  background-color: #0a0a0a !important;
+}
+
+.bn-default-styles {
+  font-size: 20px !important;
+}
+
+/* h1 .bn-inline-content{
+  content: "" !important;
+  display: none !important;
+} */
+
+/* bn-inline-content::before{
+  content: "" !important;
+  display: none !important;
+} */
+
+bn-block-content::before {
+  content: "" !important;
+}
+
+/* .bn-container[data-custom-font-demo] .bn-editor * {
+  font-family: "Georgia", serif; 
+} */
+
+/* .h1textfamily {
+  font-family: "Georgia", serif !important;
+} */
+
+/* .ProseMirror {
+  padding: 0 !important;
+} */
+
+.article-detail .bn-inline-content:has(> .ProseMirror-trailingBreak:only-child):before {
+  color: transparent;
+}
+
+/* .bn-block-content:not(:first-child) [data-placeholder]:empty::before {
+  display: none !important;
+} */
+
+/* .bn-block-content > .bn-inline-content:first-of-type{
+  background-color: yellow ;
+}
+
+.ProseMirror-trailingBreak:first-of-type {
+  background-color: red;
+} */
+
+
+/* Target the first block container */
+/* .bn-block-group .bn-block-outer:nth-child(1) {
+  opacity: 1 !important;
+  color: inherit !important;
+  background-color: red;
+} */
+
+/* Target the second block container */
+/* .bn-block-group .bn-block-outer:nth-child(2){
+  background-color: pink;
+} */
+
+/* Crucial step: Hide placeholders on all other subsequent blocks */
+/* .bn-block-group .bn-block-outer:nth-child(n+3){
+  content: none !important;
+  color: transparent !important;
+  background-color: yellow;
+} */
