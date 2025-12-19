@@ -68,10 +68,17 @@ const CreateArticlePage = () => {
   const hasRealContent = blocks.some((block) => {
     if (block.type === "image") return true;
 
-    return block.content?.some((item) => {
-      const text = item.text.trim();
-      return text && text.length > 0 && !["Title...", "Tell your story..."].includes(text);
-    });
+    if (block.content && Array.isArray(block.content)) {
+      return block.content?.some((item: any) => {
+        if (item.type === "text") {
+          const text = item.text.trim();
+          return text && text.length > 0 && !["Title...", "Tell your story..."].includes(text);
+        }
+        return false;
+      });
+    }
+
+    return false;
   });
 
   const handleArticleUpload = async () => {
@@ -82,9 +89,9 @@ const CreateArticlePage = () => {
       return;
     }
 
-    const firstBlock = editor.document[0];
+    // const firstBlock = editor.document[0];
     // const title = firstBlock.type === "heading" ? firstBlock.content.map((c) => c.text).join("") : "Untitled Article";
-    const title = firstBlock.type === "heading" ? firstBlock.content.map((c) => c.text).join("") : "";
+    // const title = firstBlock.type === "heading" ? firstBlock.content.map((c) => c.text).join("") : "";
 
     try {
       if (!address) {
@@ -97,7 +104,11 @@ const CreateArticlePage = () => {
 
       console.log("CovebehhImagess", coverImage);
 
-      if (coverImage && editor.document[0].props.url !== coverImage) {
+      if (coverImage) {
+        const firstBlock = editor.document[0];
+        const isFirstImage = firstBlock.type === "image" && (firstBlock.props as any)?.url === coverImage;
+
+        if (!isFirstImage) {
           editor.insertBlocks(
             [
               {
@@ -113,6 +124,7 @@ const CreateArticlePage = () => {
             editor.document[0],
             "before"
           );
+        }
       }
 
       const postId = await createarticle(editor.document, author, username);

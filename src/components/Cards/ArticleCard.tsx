@@ -20,22 +20,27 @@ interface ArticleCardProps {
 export function ArticleCard({ article }: ArticleCardProps) {
   const navigate = useNavigate();
 
-  // Extract readable time
+  // ========== Extract readable time
+  // const timeAgo = () => {
+  //   const now = Date.now();
+  //   const diff = now - new Date(article.createdAt).getTime();
+  //   const minutes = Math.floor(diff / 60000);
+  //   const hours = Math.floor(minutes / 60);
+  //   const days = Math.floor(hours / 24);
+
+  //   if (days > 0) return `${days}d ago`;
+  //   if (hours > 0) return `${hours}h ago`;
+  //   if (minutes > 0) return `${minutes}m ago`;
+  //   return "Just now";
+  // };
+
   const timeAgo = () => {
-    const now = Date.now();
-    const diff = now - new Date(article.createdAt).getTime();
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
+    return "Just now"
+  }
 
-    if (days > 0) return `${days}d ago`;
-    if (hours > 0) return `${hours}h ago`;
-    if (minutes > 0) return `${minutes}m ago`;
-    return "Just now";
-  };
-
-  // Estimate reading time (words per minute ≈ 200)
-  const readingTime = Math.max(1, Math.ceil(article.preview.split(" ").length / 200));
+  // ==========  Estimate reading time (words per minute ≈ 200)
+  // const readingTime = Math.max(1, Math.ceil(article.preview.split(" ").length / 200));
+  const readingTime = 1
 
   return (
     <div className="flex h-[350px] flex-col w-full grid place-items-center">

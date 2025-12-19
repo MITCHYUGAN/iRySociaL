@@ -45,7 +45,7 @@ export default function ArticlePage() {
     if (finalContent[0]?.type === "image" && finalContent[1]?.type === "heading") {
       // Extract title from second block
       title = finalContent[1].content?.map((c: any) => c.text || "").join("") || title;
-      finalContent = finalContent.filter((_, i) => i !== 1); // Remove second block only
+      finalContent = finalContent.filter((_: any, i: number) => i !== 1); // Remove second block only
     }
 
     // // Remove the first block if it has a type of heading
