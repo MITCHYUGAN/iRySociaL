@@ -94,13 +94,25 @@ const HomeFeeds = () => {
           ))}
 
           {/* <PostCard key={posts[0].id} content={posts[0].content} username={posts[0].username} likes={posts[0].likes} comments={posts[0].comments} featured /> */}
-          <VideoCard isGated={false} />
+          <div className="w-full grid place-items-center">
+            <div className="flex gap-10 w-[80%]">
+              <VideoCard isGated={false} />
+              <VideoCard isGated={true} />
+            </div>
+            <hr className="border mt-10 mb-10 w-full" />
+          </div>
 
           {posts.slice(1, 2).map((post) => (
             <PostCard key={post.id} content={post.content} username={post.username} likes={post.likes} comments={post.comments} />
           ))}
 
-          <VideoCard isGated={true} />
+          <div className="w-full grid place-items-center">
+            <div className="flex gap-10 w-[80%]">
+              <VideoCard isGated={false} />
+              <VideoCard isGated={true} />
+            </div>
+            <hr className="border mt-10 mb-10 w-full" />
+          </div>
 
           {articles.slice(1, 2).map((a) => (
             <ArticleCard key={a.id} article={a} />
@@ -126,9 +138,9 @@ const HomeFeeds = () => {
         <TabsContent value="trending" className="space-y-4">
           <VideoCard isGated={false} />
           {/* <PostCard featured /> */}
-         {articles.slice(0, 1).map((a) => (
-          <ArticleCard key={a.id} article={a} />
-        ))}
+          {articles.slice(0, 1).map((a) => (
+            <ArticleCard key={a.id} article={a} />
+          ))}
           {/* <PostCard /> */}
         </TabsContent>
       </Tabs>
